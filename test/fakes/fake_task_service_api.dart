@@ -1,12 +1,12 @@
 
 import 'dart:convert';
 
-import 'package:im_on_it/data/services/task_service.dart';
+import 'package:im_on_it/data/services/task_service_interface.dart';
 import 'package:im_on_it/domain/models/task.dart';
 
 DateTime _now = DateTime.utc(2025, 01, 23);
 
-class FakeTaskServiceAPI implements TaskService {
+class FakeTaskServiceAPI implements TaskServiceInterface {
 
   int _sequentialId = 0;
   final _tasks = List<Task>.empty(growable: true);

@@ -1,6 +1,7 @@
 # im_on_it
 
-I am On It!
+I am On It! 
+A task manager... supporting "Yes Dear" tasks
 
 ## Index
 
@@ -11,3 +12,8 @@ I am On It!
 * json_annotation
 * json_serializable
 * test
+
+### Implement
+* Download
+* Pub get
+* dart run build_runner build
