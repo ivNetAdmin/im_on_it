@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import '../../../domain/models/task.dart';
-import '../task_service.dart';
+import '../task_service_interface.dart';
 
-class TaskServiceAPI implements TaskService {
+class TaskService implements TaskServiceInterface {
 
   int _sequentialId = 0;
   final _tasks = List<Task>.empty(growable: true);
 
-  TaskServiceAPI() {
+  TaskService() {
     _createTaskList();
   }
 

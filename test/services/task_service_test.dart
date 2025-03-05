@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:im_on_it/data/services/task_service.dart';
+import 'package:im_on_it/data/services/task_service_interface.dart';
 
 import '../fakes/fake_task_service_api.dart';
 
 void main() {
   group('DataServiceAPI tests', () {
-    late TaskService taskServiceAPI;
+    late TaskServiceInterface taskServiceAPI;
 
     setUp(() {
-      taskServiceAPI = FakeTaskServiceAPI() as TaskService;
+      taskServiceAPI = FakeTaskServiceAPI() as TaskServiceInterface;
     });
 
     test('should get json task list', () async {
