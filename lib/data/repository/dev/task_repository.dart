@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:im_on_it/domain/models/task.dart';
+import 'package:im_on_it/utils/format_message.dart';
 import 'package:im_on_it/utils/result.dart';
 
 import '../../services/task_service_interface.dart';
@@ -23,22 +24,18 @@ class TaskRepository implements TaskRepositoryInterface {
 
     switch (result) {
       case Ok(): {
-
         var taskArray = jsonDecode(result.value) as List;
 
         for (var i = 0; i < taskArray.length; i++) {
           var task = Task.fromJson(taskArray[0]);
           tasks.add(task);
         }
-
         return Result.ok(tasks);
-
       }
       case Error(): {
-        return Result.error(Exception(result.error));
+        var errMsg = result.error.getMessage;
+        return Result.error(Exception(errMsg));
       }
     }
-
-
   }
 }

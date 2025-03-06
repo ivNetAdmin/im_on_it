@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:im_on_it/data/repository/dev/task_repository.dart';
 import 'package:im_on_it/data/services/task_service_interface.dart';
 import 'package:im_on_it/domain/models/task.dart';
+import 'package:im_on_it/utils/format_message.dart';
 import 'package:im_on_it/utils/result.dart';
 
 import '../fakes/fake_task_error_service.dart';
@@ -34,7 +35,9 @@ void main() {
           expect(tasks[0].id, 0);
           expect(tasks[0].description, 'My first task!');
           expect(tasks[0].createDate, _now);
-        case Error(): {}
+        case Error(): {
+          throw(Exception('Testing Error!'));
+        }
       }
     });
 
@@ -46,9 +49,12 @@ void main() {
       Result<List<Task>> result = await taskRepository.getTaskList();
 
       switch (result) {
-        case Ok(): {}
+        case Ok(): {
+          throw(Exception('Testing Error!'));
+        }
         case Error(): {
-          expect(result.error.toString(),'Exception: Exception: Fake getTaskListJson error');
+          var errMsg = result.error.getMessage;
+          expect(errMsg,'Fake getTaskListJson error');
         }
       }
     });
