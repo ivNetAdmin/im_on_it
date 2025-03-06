@@ -8,7 +8,7 @@ void main() {
     late TaskServiceInterface taskServiceAPI;
 
     setUp(() {
-      taskServiceAPI = FakeTaskServiceAPI() as TaskServiceInterface;
+      taskServiceAPI = FakeTaskService() as TaskServiceInterface;
     });
 
     test('should get json task list', () async {
