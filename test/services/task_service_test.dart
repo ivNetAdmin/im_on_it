@@ -1,23 +1,42 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:im_on_it/data/services/task_service_interface.dart';
+import 'package:im_on_it/utils/result.dart';
 
-import '../fakes/fake_task_service_api.dart';
+import '../fakes/fake_task_error_service.dart';
+import '../fakes/fake_task_service.dart';
 
 void main() {
-  group('DataServiceAPI tests', () {
-    late TaskServiceInterface taskServiceAPI;
+  group('DataService tests', () {
+    late TaskServiceInterface taskService;
+    late TaskServiceInterface taskErrorService;
 
     setUp(() {
-      taskServiceAPI = FakeTaskService() as TaskServiceInterface;
+      taskService = FakeTaskService() as TaskServiceInterface;
+      taskErrorService = FakeTaskErrorService() as TaskServiceInterface;
     });
 
     test('should get json task list', () async {
-      var result = await taskServiceAPI.getTaskListJson();
+      var result = await taskErrorService.getTaskListJson();
 
-      expect(result.toString(),
-          '[{"id":0,"createDate":"2025-01-23T00:00:00.000Z","description":"My first task!"},'
+      switch (result) {
+        case Ok(): {
+          expect(result.value,'[{"id":0,"createDate":"2025-01-23T00:00:00.000Z","description":"My first task!"},'
               '{"id":1,"createDate":"2025-01-23T00:00:00.000Z","description":"My next task!"},'
               '{"id":2,"createDate":"2025-01-23T00:00:00.000Z","description":"My next next task!"}]');
+        }
+        case Error(): {}
+        }
+      });
+
+    test('should get error', () async {
+      var result = await taskService.getTaskListJson();
+
+      switch (result) {
+        case Ok(): {}
+        case Error(): {
+          expect(result.error,'Fake getTaskListJson error');
+        }
+      }
     });
   });
 }

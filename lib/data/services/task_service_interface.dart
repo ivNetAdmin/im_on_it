@@ -1,3 +1,5 @@
+import '../../utils/result.dart';
+
 abstract class TaskServiceInterface {
-  Future<String> getTaskListJson();
+  Future<Result<String>>getTaskListJson();
 }

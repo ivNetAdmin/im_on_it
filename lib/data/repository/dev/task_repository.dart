@@ -19,14 +19,26 @@ class TaskRepository implements TaskRepositoryInterface {
 
     List<Task> tasks = [];
 
-    var jsonStr = await _taskService.getTaskListJson();
-    var taskArray = jsonDecode(jsonStr) as List;
+    var result = await _taskService.getTaskListJson();
 
-    for (var i = 0; i < taskArray.length; i++) {
-      var task = Task.fromJson(taskArray[0]);
-      tasks.add(task);
+    switch (result) {
+      case Ok(): {
+
+        var taskArray = jsonDecode(result.value) as List;
+
+        for (var i = 0; i < taskArray.length; i++) {
+          var task = Task.fromJson(taskArray[0]);
+          tasks.add(task);
+        }
+
+        return Result.ok(tasks);
+
+      }
+      case Error(): {
+        return Result.error(Exception(result.error));
+      }
     }
 
-    return Result.ok(tasks);
+
   }
 }

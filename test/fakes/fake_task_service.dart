@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:im_on_it/data/services/task_service_interface.dart';
 import 'package:im_on_it/domain/models/task.dart';
+import 'package:im_on_it/utils/result.dart';
 
 DateTime _now = DateTime.utc(2025, 01, 23);
 
@@ -16,8 +17,8 @@ class FakeTaskService implements TaskServiceInterface {
   }
 
   @override
-  Future<String> getTaskListJson() async {
-    return jsonEncode(_tasks.map((e) => e.toJson()).toList());
+  Future<Result<String>> getTaskListJson() async {
+      return Result.ok(jsonEncode(_tasks.map((e) => e.toJson()).toList()));
   }
 
   Future<void> _createTaskList() async {
