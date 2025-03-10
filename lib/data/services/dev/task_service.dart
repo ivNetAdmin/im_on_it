@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../../domain/models/task.dart';
+import '../../../utils/result.dart';
 import '../task_service_interface.dart';
 
 class TaskService implements TaskServiceInterface {
@@ -13,8 +14,13 @@ class TaskService implements TaskServiceInterface {
   }
 
   @override
-  Future<String> getTaskListJson() async {
-    return jsonEncode(_tasks.map((e) => e.toJson()).toList());
+  Future<Result<String>> getTaskListJson() async {
+    try {
+      return Result.ok(jsonEncode(_tasks.map((e) => e.toJson()).toList()));
+    } on Exception catch (exception)
+    {
+      return Result.error(exception);
+    }
   }
 
   Future<void> _createTaskList() async {
