@@ -15,7 +15,17 @@ class HomeScreen extends StatelessWidget {
           child: ListenableBuilder(
             listenable: viewModel.loadCmd,
         builder: (context, _) {
-              return Text(viewModel.tasks.length.toString());
+          return CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Container(),
+                ),
+                SliverList.builder(
+                  itemCount: viewModel.tasks.length,
+                    itemBuilder: (_, index) => Text(viewModel.tasks[index].description),
+                ),
+              ],
+          );
         }
           ),
       ),

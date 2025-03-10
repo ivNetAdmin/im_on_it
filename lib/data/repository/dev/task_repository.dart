@@ -27,7 +27,7 @@ class TaskRepository implements TaskRepositoryInterface {
         var taskArray = jsonDecode(result.value) as List;
 
         for (var i = 0; i < taskArray.length; i++) {
-          var task = Task.fromJson(taskArray[0]);
+          var task = Task.fromJson(taskArray[i]);
           tasks.add(task);
         }
         return Result.ok(tasks);
