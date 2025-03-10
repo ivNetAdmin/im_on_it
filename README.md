@@ -11,6 +11,8 @@ A task manager... supporting "Yes Dear" tasks
 * build_runner
 * json_annotation
 * json_serializable
+* go_router
+* provider
 * test
 
 ### Implement
