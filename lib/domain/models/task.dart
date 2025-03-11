@@ -48,25 +48,21 @@ abstract class Task with _$Task {
 
   }) = _Task;
 
-  int displayOrder()
-  {
-   return 0;
+  get displayOrder {
+    return displayTimeLapsed();
   }
 
   int displayTimeLapsed()
   {
-    // daysLapsed = targetDate - today
+    // daysLapsed = today - lastCompletedDate
     // time elapsed (%) is (daysLapsed/timeSpan) * 100
 
-    DateTime a = lastCompletedDate;
-    DateTime b = DateTime.now();
-
-    int days = b.difference(a).inDays;
+    int daysLapsed = DateTime.now().difference(lastCompletedDate).inDays;
 
     var timeSpanEnum  = TimeSpanEnum.values.byName(timeSpan);
     int timeSpanDays = timeSpanEnum.value.toInt();
 
-    return ((days/timeSpanDays) * 100).round();
+    return ((daysLapsed/timeSpanDays) * 100).round();
   }
 
   DateTime targetDate()

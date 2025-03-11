@@ -4,7 +4,7 @@ import 'package:flutter_guid/flutter_guid.dart';
 import '../domain/models/task.dart';
 
 List<Task> createTaskList() {
-  DateTime now = DateTime.utc(2025, 01, 23);
+  DateTime now = DateTime.now().subtract(Duration(days: 14));
 
   final tasks = List<Task>.empty(growable: true);
 
@@ -15,7 +15,7 @@ List<Task> createTaskList() {
       createDate: now,
       lastCompletedDate: now,
       type: 'fun',
-      timeSpan: 'd',
+      timeSpan: 'w',
       timePeriod: 'd',
       repeat: false,
     ),
@@ -28,7 +28,7 @@ List<Task> createTaskList() {
       createDate: now,
       lastCompletedDate: now,
       type: 'chore',
-      timeSpan: 'w',
+      timeSpan: 'm3',
       timePeriod: 'wd',
       repeat: true,
     ),
@@ -41,7 +41,7 @@ List<Task> createTaskList() {
       createDate: now,
       lastCompletedDate: now,
       type: 'yes_dear',
-      timeSpan: 'm',
+      timeSpan: 'd',
       timePeriod: 'we',
       repeat: true,
     ),

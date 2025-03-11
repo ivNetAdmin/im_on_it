@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 SliverList.builder(
                   itemCount: viewModel.tasks.length,
-                    itemBuilder: (_, index) => Text(viewModel.tasks[index].description),
+                    itemBuilder: (_, index) => Text('${viewModel.tasks[index].timeSpan} ${viewModel.tasks[index].lastCompletedDate} ${viewModel.tasks[index].displayTimeLapsed()} ${viewModel.tasks[index].description}'),
                 ),
               ],
           );

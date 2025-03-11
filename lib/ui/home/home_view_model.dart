@@ -28,7 +28,7 @@ class HomeViewModel extends ChangeNotifier {
       final result = await _taskRepository.getTaskList();
       switch (result) {
         case Ok<List<Task>>():
-          _tasks = result.value;
+          _tasks = setDisplayOrder(result.value);
         case Error<List<Task>>():
           var err = result.error;
       }
@@ -36,5 +36,12 @@ class HomeViewModel extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  List<Task> setDisplayOrder(List<Task> tasks) {
+    tasks.sort((b, a) {
+      return a.displayOrder.compareTo(b.displayOrder);
+    });
+    return tasks;
   }
 }
