@@ -34,7 +34,7 @@ void main() {
           expect(tasks.length, 3);
           expect(tasks[0].id,"aaaaaaaa-aaaa-cccc-dddd-eeeeeeeeeeee");
           expect(tasks[0].description, 'My first task!');
-          expect(tasks[0].targetDate, _now);
+          expect(tasks[0].createDate, _now);
         case Error(): {
           throw(Exception('Testing Error!'));
         }

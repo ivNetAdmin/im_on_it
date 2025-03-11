@@ -10,7 +10,7 @@ List<Task> createTaskList() {
     Task(
       id: Guid("aaaaaaaa-aaaa-cccc-dddd-eeeeeeeeeeee").toString(),
       description: 'My first task!',
-      targetDate: now,
+      createDate: now,
       type: 'fun',
       timeSpan: 'd',
       timePeriod: 'd',
@@ -22,7 +22,7 @@ List<Task> createTaskList() {
     Task(
       id: Guid("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee").toString(),
       description: 'My next task!',
-      targetDate: now,
+      createDate: now,
       type: 'chore',
       timeSpan: 'w',
       timePeriod: 'wd',
@@ -34,7 +34,7 @@ List<Task> createTaskList() {
     Task(
       id: Guid("aaaaaaaa-cccc-cccc-dddd-eeeeeeeeeeee").toString(),
       description: 'My next next task!',
-      targetDate: now,
+      createDate: now,
       type: 'yes_dear',
       timeSpan: 'm',
       timePeriod: 'we',

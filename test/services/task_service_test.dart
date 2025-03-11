@@ -23,7 +23,7 @@ void main() {
         case Ok():
           {
             expect(result.value,
-                '[{"id":"aaaaaaaa-aaaa-cccc-dddd-eeeeeeeeeeee","targetDate":"2025-01-23T00:00:00.000Z","description":"My first task!","type":"fun","timeSpan":"d","timePeriod":"d","repeat":false,"displayOrder":null,"displayTimeLapsed":null},{"id":"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee","targetDate":"2025-01-23T00:00:00.000Z","description":"My next task!","type":"chore","timeSpan":"w","timePeriod":"wd","repeat":true,"displayOrder":null,"displayTimeLapsed":null},{"id":"aaaaaaaa-cccc-cccc-dddd-eeeeeeeeeeee","targetDate":"2025-01-23T00:00:00.000Z","description":"My next next task!","type":"yes_dear","timeSpan":"m","timePeriod":"we","repeat":true,"displayOrder":null,"displayTimeLapsed":null}]');
+                '[{"id":"aaaaaaaa-aaaa-cccc-dddd-eeeeeeeeeeee","createDate":"2025-01-23T00:00:00.000Z","lastCompletedDate":null,"description":"My first task!","type":"fun","timeSpan":"d","timePeriod":"d","repeat":false},{"id":"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee","createDate":"2025-01-23T00:00:00.000Z","lastCompletedDate":null,"description":"My next task!","type":"chore","timeSpan":"w","timePeriod":"wd","repeat":true},{"id":"aaaaaaaa-cccc-cccc-dddd-eeeeeeeeeeee","createDate":"2025-01-23T00:00:00.000Z","lastCompletedDate":null,"description":"My next next task!","type":"yes_dear","timeSpan":"m","timePeriod":"we","repeat":true}]');
           }
         case Error():
           {
