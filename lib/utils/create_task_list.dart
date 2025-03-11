@@ -1,5 +1,7 @@
+
 import 'package:flutter_guid/flutter_guid.dart';
-import 'package:im_on_it/domain/models/task.dart';
+
+import '../domain/models/task.dart';
 
 List<Task> createTaskList() {
   DateTime now = DateTime.utc(2025, 01, 23);
@@ -8,7 +10,7 @@ List<Task> createTaskList() {
 
   tasks.add(
     Task(
-      id: Guid("aaaaaaaa-aaaa-cccc-dddd-eeeeeeeeeeee").toString(),
+      id: Guid.newGuid.toString(),
       description: 'My first task!',
       targetDate: now,
       type: 'fun',
@@ -20,7 +22,7 @@ List<Task> createTaskList() {
 
   tasks.add(
     Task(
-      id: Guid("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee").toString(),
+      id: Guid.newGuid.toString(),
       description: 'My next task!',
       targetDate: now,
       type: 'chore',
@@ -32,7 +34,7 @@ List<Task> createTaskList() {
 
   tasks.add(
     Task(
-      id: Guid("aaaaaaaa-cccc-cccc-dddd-eeeeeeeeeeee").toString(),
+      id: Guid.newGuid.toString(),
       description: 'My next next task!',
       targetDate: now,
       type: 'yes_dear',
