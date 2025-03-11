@@ -1,4 +1,3 @@
-import 'package:flutter_guid/flutter_guid.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'task.freezed.dart';
