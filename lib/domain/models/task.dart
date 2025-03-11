@@ -21,7 +21,7 @@ abstract class Task with _$Task {
 
     /// Date task was last completed
     /// /// May be null if the task is not yet completed.
-    DateTime? lastCompletedDate,
+    required DateTime lastCompletedDate,
 
     /// task description
     required String description,
@@ -55,20 +55,26 @@ abstract class Task with _$Task {
 
   int displayTimeLapsed()
   {
-    return 0;
+    // daysLapsed = targetDate - today
+    // time elapsed (%) is (daysLapsed/timeSpan) * 100
+
+    DateTime a = lastCompletedDate;
+    DateTime b = DateTime.now();
+
+    int days = b.difference(a).inDays;
+
+    var timeSpanEnum  = TimeSpanEnum.values.byName(timeSpan);
+    int timeSpanDays = timeSpanEnum.value.toInt();
+
+    return ((days/timeSpanDays) * 100).round();
   }
 
-  DateTime? targetDate()
+  DateTime targetDate()
   {
-    // the target date is the createDate + timeSpan days
+    // the target date is the createDate or lastCompletedDate + timeSpan days
     var timeSpanEnum  = TimeSpanEnum.values.byName(timeSpan);
     int days = timeSpanEnum.value.toInt();
-
-    var targetDate = lastCompletedDate == null
-        ? createDate.add(Duration(days: days))
-        : lastCompletedDate?.add(Duration(days: days));
-
-    return targetDate;
+    return lastCompletedDate.add(Duration(days: days));
   }
 
   factory Task.fromJson(Map<String, dynamic> json) =>
