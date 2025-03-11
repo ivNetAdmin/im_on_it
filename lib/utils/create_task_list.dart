@@ -1,19 +1,21 @@
+
 import 'package:flutter_guid/flutter_guid.dart';
-import 'package:im_on_it/domain/models/task.dart';
+
+import '../domain/models/task.dart';
 
 List<Task> createTaskList() {
-  DateTime now = DateTime.now(); //DateTime.utc(2025, 01, 23);
+  DateTime now = DateTime.now().subtract(Duration(days: 14));
 
   final tasks = List<Task>.empty(growable: true);
 
   tasks.add(
     Task(
-      id: Guid("aaaaaaaa-aaaa-cccc-dddd-eeeeeeeeeeee").toString(),
+      id: Guid.newGuid.toString(),
       description: 'My first task!',
       createDate: now,
       lastCompletedDate: now,
       type: 'fun',
-      timeSpan: 'd',
+      timeSpan: 'w',
       timePeriod: 'd',
       repeat: false,
     ),
@@ -21,12 +23,12 @@ List<Task> createTaskList() {
 
   tasks.add(
     Task(
-      id: Guid("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee").toString(),
+      id: Guid.newGuid.toString(),
       description: 'My next task!',
       createDate: now,
       lastCompletedDate: now,
       type: 'chore',
-      timeSpan: 'w',
+      timeSpan: 'm3',
       timePeriod: 'wd',
       repeat: true,
     ),
@@ -34,12 +36,12 @@ List<Task> createTaskList() {
 
   tasks.add(
     Task(
-      id: Guid("aaaaaaaa-cccc-cccc-dddd-eeeeeeeeeeee").toString(),
+      id: Guid.newGuid.toString(),
       description: 'My next next task!',
       createDate: now,
       lastCompletedDate: now,
       type: 'yes_dear',
-      timeSpan: 'm',
+      timeSpan: 'd',
       timePeriod: 'we',
       repeat: true,
     ),
