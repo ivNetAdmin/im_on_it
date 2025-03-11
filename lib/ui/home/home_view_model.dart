@@ -39,9 +39,26 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   List<Task> setDisplayOrder(List<Task> tasks) {
+    tasks = removeLapsedTasks(tasks);
+
     tasks.sort((b, a) {
       return a.displayOrder.compareTo(b.displayOrder);
     });
     return tasks;
+  }
+
+  List<Task> removeLapsedTasks(List<Task> tasks) {
+    List<Task> cleanList = [];
+
+    for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].displayTimeLapsed() > 100) {
+        if (tasks[i].type == 'yes_dear') {
+          cleanList.add(tasks[i]);
+        }
+      } else {
+        cleanList.add(tasks[i]);
+      }
+    }
+    return cleanList;
   }
 }

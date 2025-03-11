@@ -2,7 +2,7 @@ import 'package:flutter_guid/flutter_guid.dart';
 import 'package:im_on_it/domain/models/task.dart';
 
 List<Task> createTaskList() {
-  DateTime now = DateTime.utc(2025, 01, 23);
+  DateTime now = DateTime.now(); //DateTime.utc(2025, 01, 23);
 
   final tasks = List<Task>.empty(growable: true);
 

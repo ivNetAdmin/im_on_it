@@ -8,8 +8,6 @@ import 'package:im_on_it/utils/result.dart';
 import '../fakes/fake_task_error_service.dart';
 import '../fakes/fake_task_service.dart';
 
-DateTime _now = DateTime.utc(2025, 01, 23);
-
 void main() {
   group('TaskRepository tests', () {
     late TaskRepository taskRepository;
@@ -34,7 +32,6 @@ void main() {
           expect(tasks.length, 3);
           expect(tasks[0].id,"aaaaaaaa-aaaa-cccc-dddd-eeeeeeeeeeee");
           expect(tasks[0].description, 'My first task!');
-          expect(tasks[0].createDate, _now);
         case Error(): {
           throw(Exception('Testing Error!'));
         }
