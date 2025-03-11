@@ -40,6 +40,7 @@ class HomeViewModel extends ChangeNotifier {
 
   List<Task> setDisplayOrder(List<Task> tasks) {
     tasks = removeLapsedTasks(tasks);
+    tasks = removeTimePeriodTasks(tasks);
 
     tasks.sort((b, a) {
       return a.displayOrder.compareTo(b.displayOrder);
@@ -57,6 +58,32 @@ class HomeViewModel extends ChangeNotifier {
         }
       } else {
         cleanList.add(tasks[i]);
+      }
+    }
+    return cleanList;
+  }
+
+  List<Task> removeTimePeriodTasks(List<Task> tasks) {
+    List<Task> cleanList = [];
+    var today = DateTime
+        .now()
+        .weekday;
+    //sat = 6, sun = 7
+    for (var i = 0; i < tasks.length; i++) {
+      switch (tasks[i].timePeriod) {
+        case 'd':
+          cleanList.add(tasks[i]);
+          break;
+        case 'wd':
+          if (today < 6) {
+            cleanList.add(tasks[i]);
+          }
+          break;
+        case 'we':
+          if (today > 5) {
+            cleanList.add(tasks[i]);
+          }
+          break;
       }
     }
     return cleanList;

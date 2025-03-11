@@ -59,7 +59,6 @@ void main() {
       );
 
       expect(task.displayTimeLapsed(),50);
-
     });
   });
 }
