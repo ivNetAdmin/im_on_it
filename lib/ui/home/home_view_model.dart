@@ -22,10 +22,7 @@ class HomeViewModel extends ChangeNotifier {
 
   final List<String> _buttonText = [
     'Chore',
-    'Background',
     'Fun',
-    'One Off',
-    'Repeat',
     'Yes Dear',
     '3 Day',
     'Week',
@@ -64,11 +61,14 @@ class HomeViewModel extends ChangeNotifier {
 
   Task get newTask => _newTask;
 
-  DateTime _selectedStartDate = DateTime(1958,12,18);
+  bool _currentTaskRepeatStatus = false;
+
+  DateTime _selectedStartDate = DateTime.now();
 
   Future<Result> _load() async {
     try {
       setInitialButtonColours();
+      _selectedStartDate = DateTime(1958,12,18);
 
       final result = await _taskRepository.getTaskList();
       switch (result) {
@@ -136,30 +136,25 @@ class HomeViewModel extends ChangeNotifier {
 
   void setTaskAttribute(int index) {
     if (index < 3) {
-      _buttonColours[0] = Colors.indigo;
-      _buttonColours[1] = Colors.indigo;
-      _buttonColours[2] = Colors.indigo;
+      _buttonColours[0] = Colors.green;
+      _buttonColours[1] = Colors.green;
+      _buttonColours[2] = Colors.green;
       _buttonColours[index] = Colors.indigo.shade200;
-    } else if (index < 6) {
-      _buttonColours[3] = Colors.green;
-      _buttonColours[4] = Colors.green;
-      _buttonColours[5] = Colors.green;
-      _buttonColours[index] = Colors.green.shade200;
-    } else if (index < 15) {
+    } else if (index < 12) {
+      _buttonColours[3] = Colors.blue;
+      _buttonColours[4] = Colors.blue;
+      _buttonColours[5] = Colors.blue;
       _buttonColours[6] = Colors.blue;
       _buttonColours[7] = Colors.blue;
       _buttonColours[8] = Colors.blue;
       _buttonColours[9] = Colors.blue;
       _buttonColours[10] = Colors.blue;
       _buttonColours[11] = Colors.blue;
-      _buttonColours[12] = Colors.blue;
-      _buttonColours[13] = Colors.blue;
-      _buttonColours[14] = Colors.blue;
       _buttonColours[index] = Colors.blue.shade200;
     } else {
-      _buttonColours[15] = Colors.orange;
-      _buttonColours[16] = Colors.orange;
-      _buttonColours[17] = Colors.orange;
+      _buttonColours[12] = Colors.orange;
+      _buttonColours[13] = Colors.orange;
+      _buttonColours[14] = Colors.orange;
       _buttonColours[index] = Colors.orange.shade200;
     }
 
@@ -185,36 +180,31 @@ class HomeViewModel extends ChangeNotifier {
       case 0:
         type = 'chore';
       case 1:
-        type = 'background';
-      case 2:
         type = 'fun';
-      case 3:
-        repeat = false;
-      case 4:
-        repeat = true;
-        ;
-      case 5:
+      case 2:
         type = 'yes_dear';
-      case 6:
+      case 3:
         timeSpan = 'd3';
-      case 7:
+      case 4:
         timeSpan = 'w';
-      case 8:
+      case 5:
         timeSpan = 'w2';
-      case 10:
+      case 7:
         timeSpan = 'm';
-      case 11:
+      case 8:
         timeSpan = 'm3';
-      case 13:
+      case 10:
         timeSpan = 'm6';
-      case 14:
+      case 11:
         timeSpan = 'y';
-      case 15:
+      case 12:
         timePeriod = 'd';
-      case 16:
+      case 13:
         timePeriod = 'wd';
-      case 17:
+      case 14:
         timePeriod = 'we';
+      case 99:
+        repeat = true;
     }
 
     _newTask = Task(
@@ -247,7 +237,7 @@ class HomeViewModel extends ChangeNotifier {
 
   String showNewTaskOptionStartDate() {
     if(_selectedStartDate==DateTime(1958,12,18)) {
-      return 'Select Optional Start Date';
+      return 'Optional Start Date';
     }
     return 'Start Date ${formatDate(_selectedStartDate)}';
   }
@@ -274,9 +264,6 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> setInitialButtonColours() async {
     _buttonColours.clear();
 
-    _buttonColours.add(Colors.indigo.shade200);
-    _buttonColours.add(Colors.indigo);
-    _buttonColours.add(Colors.indigo);
     _buttonColours.add(Colors.green.shade200);
     _buttonColours.add(Colors.green);
     _buttonColours.add(Colors.green);
@@ -293,6 +280,50 @@ class HomeViewModel extends ChangeNotifier {
     _buttonColours.add(Colors.orange);
     _buttonColours.add(Colors.orange);
 
+  }
+
+  String getRepeatStatus() {
+    if(_currentTaskRepeatStatus) {
+      return "Repeat";
+    }else{
+      return "Don't Repeat";
+    }
+  }
+
+  void setRepeatStatus() {
+    if(_currentTaskRepeatStatus) {
+      _currentTaskRepeatStatus=false;
+    }else{
+      _currentTaskRepeatStatus=true;
+    }
+    _newTask = Task(
+      id: _newTask.id,
+      description: _newTask.description,
+      createDate: _newTask.createDate,
+      lastCompletedDate: _newTask.lastCompletedDate,
+      type: _newTask.type,
+      timeSpan: _newTask.timeSpan,
+      timePeriod: _newTask.timePeriod,
+      repeat: _currentTaskRepeatStatus,
+    );
+
+    notifyListeners();
+  }
+
+  Color getDateButtonColour() {
+    if(_selectedStartDate==DateTime(1958,12,18)) {
+      return Colors.deepPurple;
+    }else{
+      return Colors.deepPurple.shade200;
+    }
+  }
+
+  Color getRepeatButtonColour() {
+    if(!_currentTaskRepeatStatus) {
+      return Colors.deepPurple;
+    }else{
+      return Colors.deepPurple.shade200;
+    }
   }
 }
 

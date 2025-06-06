@@ -27,13 +27,13 @@ class HomeScreen extends StatelessWidget {
                       child: SizedBox(
                         width: 250,
                         child: TextField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'New Task Description'),
-                          controller: descriptionTextController,
-                          onChanged: (String value) async {
-                            viewModel.setNewTaskDescription(value);
-                          }
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'New Task Description'),
+                            controller: descriptionTextController,
+                            onChanged: (String value) async {
+                              viewModel.setNewTaskDescription(value);
+                            }
                         ),
                       ),
                     ),
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                        if (index != 9 && index != 12) {
+                        if (index != 6 && index != 9) {
                           return Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: FilledButton(
@@ -68,17 +68,22 @@ class HomeScreen extends StatelessWidget {
                           );
                         }
                       },
-                      childCount: 18,
+                      childCount: 15,
                     ),
                   ),
 
-                  SliverToBoxAdapter(
-                    child: Container(
-                      //color: Colors.yellow,
-                      padding: const EdgeInsets.all(8.0),
-                      //child: Text('Optional Start Date', style: TextStyle(fontSize: 24)),
-                      child: FilledButton(
-                        child: Text(viewModel.showNewTaskOptionStartDate()),
+                  SliverGrid.count(
+                    crossAxisCount: 3,
+                    childAspectRatio: 2.0,
+                    children: <Widget>[
+                      Container(),
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: viewModel.getDateButtonColour(),
+                        ),
+                        child: Text(viewModel.showNewTaskOptionStartDate(),
+                            textAlign: TextAlign.center),
                         onPressed: () async {
                           final currentDate = DateTime.now();
                           final selectedDate = await showDatePicker(
@@ -92,18 +97,21 @@ class HomeScreen extends StatelessWidget {
                           }
                         },
                       ),
-                    ),
+                      FilledButton(
+                          style: FilledButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: viewModel.getRepeatButtonColour(),
+                          ),
+                          onPressed: () {
+                            viewModel.setRepeatStatus();
+                          },
+                          child: Text(viewModel.getRepeatStatus(),
+                              textAlign: TextAlign.center)
+                      ),
+                    ],
                   ),
-/*
-                  SliverToBoxAdapter(
-                    child: Container(
-                      //color: Colors.yellow,
-                      padding: const EdgeInsets.all(8.0),
-                      //child: Text('Add a New Task', style: TextStyle(fontSize: 24)),
-                      child: Text(viewModel.newTaskToString()),
-                    ),
-                  ),
-*/
+
+
                   SliverToBoxAdapter(
                     child: Container(
                       //color: Colors.yellow,
@@ -114,7 +122,9 @@ class HomeScreen extends StatelessWidget {
                             foregroundColor: Colors.white,
                             backgroundColor: Colors.black45,
                           ),
-                          onPressed: descriptionTextController.text.isEmpty ? null : () {
+                          onPressed: descriptionTextController.text.isEmpty
+                              ? null
+                              : () {
                             viewModel.saveNewTask();
                             descriptionTextController.clear();
                           },
@@ -123,6 +133,16 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
 
+/*
+                  SliverToBoxAdapter(
+                    child: Container(
+                      //color: Colors.yellow,
+                      padding: const EdgeInsets.all(8.0),
+                      //child: Text('Add a New Task', style: TextStyle(fontSize: 24)),
+                      child: Text(viewModel.newTaskToString()),
+                    ),
+                  ),
+*/
                   SliverList.builder(
                     itemCount: viewModel.tasks.length,
 
