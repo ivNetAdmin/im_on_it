@@ -13,7 +13,7 @@ List<Task> createTaskList() {
       createDate: now,
       lastCompletedDate: now,
       type: 'fun',
-      timeSpan: 'd',
+      timeSpan: 'd3',
       timePeriod: 'd',
       repeat: false,
     ),

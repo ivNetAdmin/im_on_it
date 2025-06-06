@@ -22,7 +22,7 @@ void main() {
       switch (result) {
         case Ok():
           {
-            expect(result.value.length,695);
+            expect(result.value.length,696);
           }
         case Error():
           {

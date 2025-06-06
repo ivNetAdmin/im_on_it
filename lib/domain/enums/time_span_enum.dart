@@ -1,5 +1,4 @@
 enum TimeSpanEnum {
-  d(1),
   d3(3),
   w(7),
   w2(14),

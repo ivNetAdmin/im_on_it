@@ -29,7 +29,7 @@ abstract class Task with _$Task {
     /// task type: fun, chore, bground, yes_dear
     required String type,
 
-    /// task time span to finish task: d, d3, w, w2, m, m3, m6, y
+    /// task time span to finish task: d3, w, w2, m, m3, m6, y
     required String timeSpan,
 
     /// task time period when the task could be tackled: d, wd, we

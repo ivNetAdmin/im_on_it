@@ -12,7 +12,7 @@ void main() {
       );
 
       await homeViewModel.load;
-      expect(homeViewModel.tasks.length, 3);
+      expect(homeViewModel.tasks.length, 1);
     });
 
     test('remove lapsed task - yes_dear', () async {
@@ -24,8 +24,8 @@ void main() {
       expect(homeViewModel.tasks.length, 2);
 
       //not removed because it is a yes dear task
-      expect(homeViewModel.tasks[0].displayTimeLapsed(),700);
-      expect(homeViewModel.tasks[0].timeSpan,'d');
+      expect(homeViewModel.tasks[0].displayTimeLapsed(),233);
+      expect(homeViewModel.tasks[0].timeSpan,'d3');
       expect(homeViewModel.tasks[0].type,'yes_dear');
 
       //not removed because time lapsed is not greater than 100%

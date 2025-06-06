@@ -14,17 +14,17 @@ void main() {
   });
 
   group('TaskModel tests', () {
-    test('targetDate custom method time span = day (d)', ()
+    test('targetDate custom method time span = 3 day (d3)', ()
     {
       var createDateValue = _tasks[0].createDate.millisecondsSinceEpoch;
       var targetDateValue = _tasks[0].targetDate().millisecondsSinceEpoch;
       var dateDifference = targetDateValue-createDateValue;
 
       var enumByName  = TimeSpanEnum.values.byName(_tasks[0].timeSpan);
-      expect(enumByName.toString(),'TimeSpanEnum.d');
-      expect(enumByName.value,1); // 1 days
+      expect(enumByName.toString(),'TimeSpanEnum.d3');
+      expect(enumByName.value,3); // 1 days
 
-      expect(dateDifference,86400000); //86400000 = 1 day
+      expect(dateDifference,259200000); //259200000 = 3 days
 
     });
 
