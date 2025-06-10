@@ -139,7 +139,7 @@ class HomeViewModel extends ChangeNotifier {
       _buttonColours[0] = Colors.green;
       _buttonColours[1] = Colors.green;
       _buttonColours[2] = Colors.green;
-      _buttonColours[index] = Colors.indigo.shade200;
+      _buttonColours[index] = Colors.green.shade200;
     } else if (index < 12) {
       _buttonColours[3] = Colors.blue;
       _buttonColours[4] = Colors.blue;
