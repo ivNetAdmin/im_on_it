@@ -18,13 +18,15 @@ class DatabaseHelper {
 
   static Future<Database> _getDb() async {
 
-    //databaseFactory.deleteDatabase(join(await getDatabasesPath(), _dbName));
-
     return openDatabase(join(await getDatabasesPath(), _dbName),
         onCreate: (db, version) async =>
         await db.execute(_taskTableSql),
         version: _version
     );
+  }
+
+  static void deleteDb() async {
+    databaseFactory.deleteDatabase(join(await getDatabasesPath(), _dbName));
   }
 
   static Future<int> addTask(Map<String, dynamic> task) async {
