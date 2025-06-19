@@ -1,59 +1,76 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:im_on_it/data/repository/dev/task_repository.dart';
+import 'package:im_on_it/data/entities/task_entity.dart';
+import 'package:im_on_it/data/repository/task_repository_interface.dart';
 import 'package:im_on_it/data/services/task_service_interface.dart';
-import 'package:im_on_it/domain/models/task.dart';
-import 'package:im_on_it/utils/format_message.dart';
 import 'package:im_on_it/utils/result.dart';
 
-import '../fakes/fake_task_error_service.dart';
+import '../fakes/fake_task_repository.dart';
 import '../fakes/fake_task_service.dart';
 
 void main() {
   group('TaskRepository tests', () {
-    late TaskRepository taskRepository;
-    late TaskServiceInterface fakeTaskService;
-    late TaskServiceInterface taskErrorService;
+    late TaskRepositoryInterface taskRepository;
+    late TaskServiceInterface taskService;
 
     setUp(() {
-      fakeTaskService = FakeTaskService() as TaskServiceInterface;
-      taskErrorService = FakeTaskErrorService() as TaskServiceInterface;
+      taskService = FakeTaskService() as TaskServiceInterface;
+
+      taskRepository = FakeTaskRepository(
+        taskService: taskService,
+      ) as TaskRepositoryInterface;
+
     });
 
     test('should get task list containing 3 tasks', () async {
-      taskRepository = TaskRepository(
-        taskService: fakeTaskService,
-      );
-
-      Result<List<Task>> result = await taskRepository.getTaskList();
+      Result result = await taskRepository.getTaskList();
 
       switch (result) {
-        case Ok<List<Task>>():
+        case Ok():
           var tasks = result.value;
           expect(tasks.length, 3);
-          expect(tasks[0].id,"aaaaaaaa-aaaa-cccc-dddd-eeeeeeeeeeee");
+          expect(tasks[0].id, 1);
           expect(tasks[0].description, 'My first task!');
-        case Error(): {
-          throw(Exception('Testing Error!'));
-        }
+        case Error():
+          {
+            throw(Exception('Testing Error!'));
+          }
       }
     });
 
-    test('should get service error', () async {
-      taskRepository = TaskRepository(
-        taskService: taskErrorService,
+    test('should add task to task database', () async {
+      int now = DateTime.now().microsecondsSinceEpoch;
+
+      TaskEntity newTask = TaskEntity(
+        id: 4,
+        description: 'My first task!',
+        createDate: now,
+        lastCompletedDate: now,
+        type: 'fun',
+        timeSpan: 'd3',
+        timePeriod: 'd',
+        repeat: 0,
       );
 
-      Result<List<Task>> result = await taskRepository.getTaskList();
+      Result result = await taskRepository.addNewTask(newTask);
 
       switch (result) {
-        case Ok(): {
-          throw(Exception('Testing Error!'));
-        }
-        case Error(): {
-          var errMsg = result.error.getMessage;
-          expect(errMsg,'Fake getTaskListJson error');
-        }
+        case Ok():
+          int rowId= result.value;
+          expect(rowId, 4);
+        case Error():
+          throw(Exception(result));
       }
+
+      result = await taskRepository.getTaskList();
+
+      switch (result) {
+        case Ok():
+          List<TaskEntity> tasks = result.value;
+          expect(tasks.length, 4);
+        case Error():
+          throw(Exception(result));
+      }
+
     });
   });
 }

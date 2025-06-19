@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_guid/flutter_guid.dart';
+import 'package:im_on_it/data/entities/task_entity.dart';
 
 import '../../data/repository/task_repository_interface.dart';
 import '../../domain/models/task.dart';
 import '../../utils/command.dart';
 import '../../utils/result.dart';
+import 'helpers/home_view_model_helper.dart';
 
 class HomeViewModel extends ChangeNotifier {
   HomeViewModel({
@@ -14,31 +15,15 @@ class HomeViewModel extends ChangeNotifier {
       ..execute();
   }
 
+  String _errorMessage = '';
+  String get errorMessage => _errorMessage;
+
   final TaskRepositoryInterface _taskRepository;
 
   final List<Color> _buttonColours = [];
-
   List<Color> get buttonColours => _buttonColours;
 
-  final List<String> _buttonText = [
-    'Chore',
-    'Fun',
-    'Yes Dear',
-    '3 Day',
-    'Week',
-    '2 Week',
-    '',
-    'Month',
-    '3 Month',
-    '',
-    '6 Month',
-    'Annual',
-    'Any Day',
-    'Weekday',
-    'Weekend'
-  ];
-
-  List<String> get buttonText => _buttonText;
+  List<String> get buttonText => HomeViewModelHelper.buttonText;
 
   late Command0 loadCmd;
 
@@ -48,16 +33,7 @@ class HomeViewModel extends ChangeNotifier {
 
   List<Task> get tasks => _tasks;
 
-  Task _newTask = Task(
-    id: Guid.newGuid.toString(),
-    description: '',
-    createDate: DateTime.now(),
-    lastCompletedDate: DateTime.now(),
-    type: 'chore',
-    timeSpan: 'd3',
-    timePeriod: 'd',
-    repeat: false,
-  );
+  Task _newTask = HomeViewModelHelper.newTask;
 
   Task get newTask => _newTask;
 
@@ -65,27 +41,29 @@ class HomeViewModel extends ChangeNotifier {
 
   DateTime _selectedStartDate = DateTime.now();
 
-  Future<Result> _load() async {
+  Future<Result<void>> _load() async {
     try {
       setInitialButtonColours();
-      _selectedStartDate = DateTime(1958,12,18);
+      _selectedStartDate = DateTime(1958, 12, 18);
 
       final result = await _taskRepository.getTaskList();
       switch (result) {
-        case Ok<List<Task>>():
-          _tasks = setDisplayOrder(result.value);
-        case Error<List<Task>>():
-          var err = result.error;
+        case Ok<List<TaskEntity>>():
+          _tasks = setDisplayOrder(mapTask(result.value));
+          return Result.ok(null);
+        case Error<List<TaskEntity>>():
+          return Result.error(result.error);
       }
-      return result;
+    } on Exception catch (e) {
+      return Result.error(e);
     } finally {
       notifyListeners();
     }
   }
 
   List<Task> setDisplayOrder(List<Task> tasks) {
-    tasks = removeLapsedTasks(tasks);
-    tasks = removeTimePeriodTasks(tasks);
+    //tasks = removeLapsedTasks(tasks);
+    //tasks = removeTimePeriodTasks(tasks);
 
     tasks.sort((b, a) {
       return a.displayOrder.compareTo(b.displayOrder);
@@ -164,8 +142,8 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   String newTaskToString() {
-
-    return '${_newTask.repeat} ${_newTask.timeSpan} ${_newTask.timePeriod} ${_newTask
+    return '${_newTask.repeat} ${_newTask.timeSpan} ${_newTask
+        .timePeriod} ${_newTask
         .lastCompletedDate} ${_newTask
         .displayTimeLapsed()} ${_newTask.type} ${_newTask.description}';
   }
@@ -230,13 +208,13 @@ class HomeViewModel extends ChangeNotifier {
       timePeriod: _newTask.timePeriod,
       repeat: _newTask.repeat,
     );
-    _selectedStartDate=selectedDate;
+    _selectedStartDate = selectedDate;
 
     notifyListeners();
   }
 
   String showNewTaskOptionStartDate() {
-    if(_selectedStartDate==DateTime(1958,12,18)) {
+    if (_selectedStartDate == DateTime(1958, 12, 18)) {
       return 'Optional Start Date';
     }
     return 'Start Date ${formatDate(_selectedStartDate)}';
@@ -256,9 +234,19 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveNewTask() {
-    _load();
-    //notifyListeners();
+  Future<void> saveNewTask() async {
+
+    final result = await _taskRepository.addNewTask(mapTaskEntity(_newTask));
+
+    switch(result)
+    {
+      case Ok<int>():
+        _errorMessage = result.value.toString();
+        _load();
+      case Error<int>():
+        _errorMessage = result.toString();
+    }
+    notifyListeners();
   }
 
   Future<void> setInitialButtonColours() async {
@@ -279,22 +267,21 @@ class HomeViewModel extends ChangeNotifier {
     _buttonColours.add(Colors.orange.shade200);
     _buttonColours.add(Colors.orange);
     _buttonColours.add(Colors.orange);
-
   }
 
   String getRepeatStatus() {
-    if(_currentTaskRepeatStatus) {
+    if (_currentTaskRepeatStatus) {
       return "Repeat";
-    }else{
+    } else {
       return "Don't Repeat";
     }
   }
 
   void setRepeatStatus() {
-    if(_currentTaskRepeatStatus) {
-      _currentTaskRepeatStatus=false;
-    }else{
-      _currentTaskRepeatStatus=true;
+    if (_currentTaskRepeatStatus) {
+      _currentTaskRepeatStatus = false;
+    } else {
+      _currentTaskRepeatStatus = true;
     }
     _newTask = Task(
       id: _newTask.id,
@@ -311,19 +298,52 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Color getDateButtonColour() {
-    if(_selectedStartDate==DateTime(1958,12,18)) {
+    if (_selectedStartDate == DateTime(1958, 12, 18)) {
       return Colors.deepPurple;
-    }else{
+    } else {
       return Colors.deepPurple.shade200;
     }
   }
 
   Color getRepeatButtonColour() {
-    if(!_currentTaskRepeatStatus) {
+    if (!_currentTaskRepeatStatus) {
       return Colors.deepPurple;
-    }else{
+    } else {
       return Colors.deepPurple.shade200;
     }
+  }
+
+  List<Task> mapTask(List<TaskEntity> taskEntities) {
+    final tasks = List<Task>.empty(growable: true);
+
+    for (final taskEntity in taskEntities) {
+      tasks.add(
+        Task(
+          id: taskEntity.id,
+          description: taskEntity.description,
+          createDate: DateTime.fromMicrosecondsSinceEpoch(
+              taskEntity.createDate),
+          lastCompletedDate: DateTime.fromMicrosecondsSinceEpoch(
+              taskEntity.lastCompletedDate),
+          type: taskEntity.type,
+          timeSpan: taskEntity.timeSpan,
+          timePeriod: taskEntity.timePeriod,
+          repeat: taskEntity.repeat == 1 ? true : false,
+        ),
+      );
+    }
+
+    return tasks;
+  }
+
+  TaskEntity mapTaskEntity(Task newTask) {
+    return TaskEntity(createDate: newTask.createDate.microsecondsSinceEpoch,
+        lastCompletedDate: newTask.lastCompletedDate.microsecondsSinceEpoch,
+        description: newTask.description,
+        type: newTask.type,
+        timeSpan: newTask.timeSpan,
+        timePeriod: newTask.timePeriod,
+        repeat: newTask.repeat ? 1 : 0);
   }
 }
 

@@ -1,49 +1,40 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:im_on_it/data/entities/task_entity.dart';
 import 'package:im_on_it/data/services/task_service_interface.dart';
-import 'package:im_on_it/utils/format_message.dart';
-import 'package:im_on_it/utils/result.dart';
-
-import '../fakes/fake_task_error_service.dart';
 import '../fakes/fake_task_service.dart';
 
 void main() {
   group('DataService tests', () {
     late TaskServiceInterface taskService;
-    late TaskServiceInterface taskErrorService;
 
     setUp(() {
       taskService = FakeTaskService() as TaskServiceInterface;
-      taskErrorService = FakeTaskErrorService() as TaskServiceInterface;
     });
 
-    test('should get json task list', () async {
-      var result = await taskService.getTaskListJson();
-
-      switch (result) {
-        case Ok():
-          {
-            expect(result.value.length,696);
-          }
-        case Error():
-          {
-            throw(Exception('Testing Error!'));
-          }
-      }
+    test('should get a data model task list', () async {
+      List<TaskEntity> tasks = await taskService.getTaskList();
+      expect(tasks.length, 3);
     });
 
-    test('should get error', () async {
-      var result = await taskErrorService.getTaskListJson();
+    test('should add task to task database', () async {
+      int now = DateTime.now().microsecondsSinceEpoch;
 
-      switch (result) {
-        case Ok():
-          {
-            throw(Exception('Testing Error!'));
-          }
-        case Error():
-          {
-            expect(result.error.getMessage, 'Fake getTaskListJson error');
-          }
-      }
+      TaskEntity newTask = TaskEntity(
+        id: 4,
+        description: 'My first task!',
+        createDate: now,
+        lastCompletedDate: now,
+        type: 'fun',
+        timeSpan: 'd3',
+        timePeriod: 'd',
+        repeat: 0,
+      );
+
+      int rowId = await taskService.addNewTask(newTask);
+      List<TaskEntity> tasks = await taskService.getTaskList();
+
+      expect(rowId, 4);
+      expect(tasks.length, 4);
     });
   });
 }
