@@ -111,6 +111,21 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
 
+                  SliverToBoxAdapter(
+                    child: Container(
+                      //color: Colors.yellow,
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 250,
+                        child: viewModel.errorMessage.isNotEmpty
+                            ? Text(
+                          viewModel.errorMessage,
+                          style: TextStyle(color: Colors.red),
+                        )
+                            : SizedBox.shrink(),
+                      ),
+                    ),
+                  ),
 
                   SliverToBoxAdapter(
                     child: Container(
@@ -166,4 +181,3 @@ class HomeScreen extends StatelessWidget {
     viewModel.setTaskAttribute(index);
   }
 }
-

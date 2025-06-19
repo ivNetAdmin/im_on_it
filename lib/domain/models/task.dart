@@ -14,7 +14,7 @@ abstract class Task with _$Task {
   const factory Task({
     /// Optional ID of the task.
     /// May be null if the task is not yet stored.
-    String? id,
+    int? id,
 
     /// Date task was created
     required DateTime createDate,
