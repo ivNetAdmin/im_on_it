@@ -1,3 +1,4 @@
+import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/time_span_enum.dart';
@@ -52,28 +53,39 @@ abstract class Task with _$Task {
     return displayTimeLapsed();
   }
 
-  int displayTimeLapsed()
-  {
+  int displayTimeLapsed() {
     // daysLapsed = today - lastCompletedDate
     // time elapsed (%) is (daysLapsed/timeSpan) * 100
 
-    int daysLapsed = DateTime.now().difference(lastCompletedDate).inDays;
+    int daysLapsed = DateTime
+        .now()
+        .difference(lastCompletedDate)
+        .inDays;
 
-    var timeSpanEnum  = TimeSpanEnum.values.byName(timeSpan);
+    var timeSpanEnum = TimeSpanEnum.values.byName(timeSpan);
     int timeSpanDays = timeSpanEnum.value.toInt();
 
-    return ((daysLapsed/timeSpanDays) * 100).round();
+    return ((daysLapsed / timeSpanDays) * 100).round();
   }
 
-  DateTime targetDate()
-  {
+  DateTime targetDate() {
     // the target date is the createDate or lastCompletedDate + timeSpan days
-    var timeSpanEnum  = TimeSpanEnum.values.byName(timeSpan);
+    var timeSpanEnum = TimeSpanEnum.values.byName(timeSpan);
     int days = timeSpanEnum.value.toInt();
     return lastCompletedDate.add(Duration(days: days));
   }
 
+  String targetDateFormatted() {
+    // the target date is the createDate or lastCompletedDate + timeSpan days
+    var timeSpanEnum = TimeSpanEnum.values.byName(timeSpan);
+    int days = timeSpanEnum.value.toInt();
+    DateTime tarGetDate = lastCompletedDate.add(Duration(days: days));
+    String convertedDateTime = "${tarGetDate.day.toString().padLeft(
+        2, '0')}-${tarGetDate.month.toString().padLeft(2, '0')}-${tarGetDate.year.toString()}";
+
+    return convertedDateTime;
+  }
+
   factory Task.fromJson(Map<String, dynamic> json) =>
       _$TaskFromJson(json);
-
 }

@@ -241,7 +241,7 @@ class HomeViewModel extends ChangeNotifier {
     switch(result)
     {
       case Ok<int>():
-        _errorMessage = result.value.toString();
+        //_errorMessage = result.value.toString();
         _load();
       case Error<int>():
         _errorMessage = result.toString();
@@ -344,6 +344,16 @@ class HomeViewModel extends ChangeNotifier {
         timeSpan: newTask.timeSpan,
         timePeriod: newTask.timePeriod,
         repeat: newTask.repeat ? 1 : 0);
+  }
+
+  IconData? getTypeIcon(String type) {
+    switch(type) {
+      case 'chore':
+        return Icons.handyman_outlined;
+        case 'fun':
+      return Icons.sentiment_satisfied_alt;
+    }
+    return Icons.notifications_active_outlined;
   }
 }
 

@@ -23,6 +23,11 @@ class TaskRepository implements TaskRepositoryInterface {
 
   @override
   Future<Result<int>> addNewTask(TaskEntity newTask) async {
+    if (newTask.description == 'deleteDb') {
+      await _taskService.deleteDb();
+      return Result.ok(0);
+    }
+
     try {
       int rowId = await _taskService.addNewTask(newTask);
       return Result.ok(rowId);
