@@ -168,6 +168,9 @@ class HomeScreen extends StatelessWidget {
                           title: Text(viewModel.tasks[index].description),
                           subtitle: Text(viewModel.tasks[index].targetDateFormatted()),
                           trailing: Icon(Icons.keyboard_double_arrow_right),
+                        onLongPress: () {
+                          viewModel.deleteTask(viewModel.tasks[index]);
+                        } ,
 
                       );
                     },

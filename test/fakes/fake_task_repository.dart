@@ -29,4 +29,14 @@ class FakeTaskRepository implements TaskRepositoryInterface {
       return Result.error(error as Exception);
     }
   }
+
+  @override
+  Future<Result<int>> deleteTask(TaskEntity task) async {
+    try{
+      int rowId = await _taskService.deleteTask(task);
+      return Result.ok(rowId);
+    } catch (error) {
+      return Result.error(error as Exception);
+    }
+  }
 }

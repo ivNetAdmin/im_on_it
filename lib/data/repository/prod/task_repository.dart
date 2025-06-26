@@ -35,4 +35,14 @@ class TaskRepository implements TaskRepositoryInterface {
       return Result.error(exception);
     }
   }
+
+  @override
+  Future<Result<int>> deleteTask(TaskEntity task) async {
+    try {
+      int rowId = await _taskService.deleteTask(task);
+      return Result.ok(rowId);
+    } on Exception catch (exception) {
+      return Result.error(exception);
+    }
+  }
 }

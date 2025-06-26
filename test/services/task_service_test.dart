@@ -17,7 +17,9 @@ void main() {
     });
 
     test('should add task to task database', () async {
-      int now = DateTime.now().microsecondsSinceEpoch;
+      int now = DateTime
+          .now()
+          .microsecondsSinceEpoch;
 
       TaskEntity newTask = TaskEntity(
         id: 4,
@@ -35,6 +37,19 @@ void main() {
 
       expect(rowId, 4);
       expect(tasks.length, 4);
+    });
+
+    test('should delete task list', () async {
+      List<TaskEntity> tasks = await taskService.getTaskList();
+      expect(tasks.length, 3);
+
+      TaskEntity taskToDelete = tasks[0];
+
+      int rowId = await taskService.deleteTask(taskToDelete);
+      tasks = await taskService.getTaskList();
+
+      expect(rowId, taskToDelete.id);
+      expect(tasks.length, 2);
     });
   });
 }

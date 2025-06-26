@@ -249,6 +249,20 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteTask(Task task) async {
+
+    final result = await _taskRepository.deleteTask(mapTaskEntity(task));
+    switch(result)
+    {
+      case Ok<int>():
+      //_errorMessage = result.value.toString();
+        _load();
+      case Error<int>():
+        _errorMessage = result.toString();
+    }
+    notifyListeners();
+  }
+
   Future<void> setInitialButtonColours() async {
     _buttonColours.clear();
 
@@ -343,7 +357,8 @@ class HomeViewModel extends ChangeNotifier {
         type: newTask.type,
         timeSpan: newTask.timeSpan,
         timePeriod: newTask.timePeriod,
-        repeat: newTask.repeat ? 1 : 0);
+        repeat: newTask.repeat ? 1 : 0,
+        id:newTask.id);
   }
 
   IconData? getTypeIcon(String type) {

@@ -72,5 +72,42 @@ void main() {
       }
 
     });
+
+    test('should delete task to task database', () async {
+
+      Result result = await taskRepository.getTaskList();
+
+      switch (result) {
+        case Ok():
+          var tasks = result.value;
+          TaskEntity taskToDelete = tasks[0];
+
+          result = await taskRepository.deleteTask(taskToDelete);
+
+          switch (result) {
+            case Ok():
+              int rowId= result.value;
+              expect(rowId, taskToDelete.id);
+            case Error():
+              throw(Exception(result));
+          }
+
+        case Error():
+          {
+            throw(Exception('Testing Error!'));
+          }
+      }
+
+      result = await taskRepository.getTaskList();
+
+      switch (result) {
+        case Ok():
+          List<TaskEntity> tasks = result.value;
+          expect(tasks.length, 2);
+        case Error():
+          throw(Exception(result));
+      }
+
+    });
   });
 }

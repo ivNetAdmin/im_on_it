@@ -43,7 +43,7 @@ class DatabaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future<int> deleteTask(Map<String, dynamic> task, String id) async {
+  static Future<int> deleteTask(int id) async {
     final db = await _getDb();
     return await db.delete("Task",
         where: 'id = ?',
