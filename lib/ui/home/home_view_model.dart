@@ -249,6 +249,26 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> editTask(Task task) async {
+    _errorMessage = 'task edit';
+    notifyListeners();
+  }
+
+  Future<void> completeTask(Task task) async {
+
+    final result = await _taskRepository.completeTask(mapTaskEntityCompletedDate(task));
+    switch(result)
+    {
+      case Ok<int>():
+      //_errorMessage = result.value.toString();
+        _load();
+      case Error<int>():
+        _errorMessage = result.toString();
+    }
+    _errorMessage = 'task completed';
+    notifyListeners();
+  }
+
   Future<void> deleteTask(Task task) async {
 
     final result = await _taskRepository.deleteTask(mapTaskEntity(task));
@@ -260,6 +280,7 @@ class HomeViewModel extends ChangeNotifier {
       case Error<int>():
         _errorMessage = result.toString();
     }
+    _errorMessage = 'task deleted';
     notifyListeners();
   }
 
@@ -359,6 +380,18 @@ class HomeViewModel extends ChangeNotifier {
         timePeriod: newTask.timePeriod,
         repeat: newTask.repeat ? 1 : 0,
         id:newTask.id);
+  }
+
+  TaskEntity mapTaskEntityCompletedDate(Task task) {
+    DateTime completedDate = DateTime.now();
+    return TaskEntity(createDate: newTask.createDate.microsecondsSinceEpoch,
+        lastCompletedDate: completedDate.microsecondsSinceEpoch,
+        description: newTask.description,
+        type: newTask.type,
+        timeSpan: newTask.timeSpan,
+        timePeriod: newTask.timePeriod,
+        repeat: task.repeat ? 1 : 0,
+        id:task.id);
   }
 
   IconData? getTypeIcon(String type) {

@@ -27,12 +27,24 @@ class FakeTaskService implements TaskServiceInterface {
         return taskId;
       }
     }
-    return 0;
+    return taskId;
   }
 
   @override
   Future<void> deleteDb() {
     // TODO: implement deleteDb
     throw UnimplementedError();
+  }
+
+  @override
+  Future<int> updateTask(TaskEntity task) async {
+    var taskId = task.id ?? 0;
+    for (var i = 0; i < _tasks.length; i++) {
+      if (_tasks[i].id == taskId) {
+        _tasks[i] = task;
+        return taskId;
+      }
+    }
+    return taskId;
   }
 }

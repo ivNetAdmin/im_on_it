@@ -37,6 +37,26 @@ class TaskRepository implements TaskRepositoryInterface {
   }
 
   @override
+  Future<Result<int>> completeTask(TaskEntity task) async {
+    try {
+      int rowId = 0;
+      // add completed task to completedTask repository
+
+      if(task.repeat==1) {
+        //if task is repeat then update last completed date for current task
+        rowId = await _taskService.updateTask(task);
+      }else{
+        // if task is not repeat then then delete the current task
+        rowId = await _taskService.deleteTask(task);
+      }
+
+      return Result.ok(rowId);
+    } on Exception catch (exception) {
+      return Result.error(exception);
+    }
+  }
+
+  @override
   Future<Result<int>> deleteTask(TaskEntity task) async {
     try {
       int rowId = await _taskService.deleteTask(task);

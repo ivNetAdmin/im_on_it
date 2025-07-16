@@ -23,6 +23,11 @@ class TaskService implements TaskServiceInterface {
   }
 
   @override
+  Future<int> updateTask(TaskEntity task) async {
+    return await DatabaseHelper.updateTask(task.toJson(), task.id ?? 0);
+  }
+
+  @override
   Future<int> deleteTask(TaskEntity task) async {
     return await DatabaseHelper.deleteTask(task.id ?? 0);
   }

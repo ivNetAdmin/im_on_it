@@ -5,7 +5,7 @@ class DatabaseHelper {
   static const int _version = 1;
   static const String _dbName = 'ImOnIt.db';
 
-  static const String _taskTableSql = 'CREATE TABLE Task('
+  static const String _dbSql = 'CREATE TABLE Task('
       'id INTEGER PRIMARY KEY,'
       'description TEXT NOT NULL,'
       'createDate INTEGER NOT NULL,'
@@ -14,13 +14,19 @@ class DatabaseHelper {
       'timeSpan TEXT NOT NULL,'
       'timePeriod TEXT NOT NULL,'
       'repeat INTEGER NOT NULL'
+      ');'
+      'CREATE TABLE Task('
+      'id INTEGER PRIMARY KEY,'
+      'description TEXT NOT NULL,'
+      'lastCompletedDate INTEGER NOT NULL,'
+      'lapsed INTEGER NOT NULL'
       ');';
 
   static Future<Database> _getDb() async {
 
     return openDatabase(join(await getDatabasesPath(), _dbName),
         onCreate: (db, version) async =>
-        await db.execute(_taskTableSql),
+        await db.execute(_dbSql),
         version: _version
     );
   }
@@ -35,7 +41,7 @@ class DatabaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future<int> updateTask(Map<String, dynamic> task, String id) async {
+  static Future<int> updateTask(Map<String, dynamic> task, int id) async {
     final db = await _getDb();
     return await db.update("Task", task,
         where: 'id = ?',
@@ -54,5 +60,17 @@ class DatabaseHelper {
     final db = await _getDb();
 
     return await db.query("Task");
+  }
+
+  static Future<List<Map<String, dynamic>>> getAllTaskLog() async {
+    final db = await _getDb();
+
+    return await db.query("TaskLog");
+  }
+
+  static Future<int> addTaskLog(Map<String, dynamic> taskLog) async {
+    final db = await _getDb();
+    return await db.insert("Task", taskLog,
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

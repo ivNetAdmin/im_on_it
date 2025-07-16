@@ -15,7 +15,7 @@ abstract class TaskEntity with _$TaskEntity {
     required int createDate,
 
     /// Date task was last completed
-    /// /// May be null if the task is not yet completed.
+    /// May be null if the task is not yet completed.
     required int lastCompletedDate,
 
     /// task description

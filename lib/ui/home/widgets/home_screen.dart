@@ -165,11 +165,14 @@ class HomeScreen extends StatelessWidget {
                       //itemBuilder: (_, index) => Text('${viewModel.tasks[index].timeSpan} ${viewModel.tasks[index].lastCompletedDate} ${viewModel.tasks[index].displayTimeLapsed()} ${viewModel.tasks[index].type} ${viewModel.tasks[index].description} ${viewModel.tasks[index].description}')
                       return ListTile(
                           leading: CircleAvatar(child: Icon(viewModel.getTypeIcon(viewModel.tasks[index].type))),
-                          title: Text(viewModel.tasks[index].description),
+                          title: Text('${viewModel.tasks[index].description} ${viewModel.tasks[index].id} ${viewModel.tasks[index].repeat}'),
                           subtitle: Text(viewModel.tasks[index].targetDateFormatted()),
                           trailing: Icon(Icons.keyboard_double_arrow_right),
+                        onTap: (){
+                          viewModel.editTask(viewModel.tasks[index]);
+                            },
                         onLongPress: () {
-                          viewModel.deleteTask(viewModel.tasks[index]);
+                          viewModel.completeTask(viewModel.tasks[index]);
                         } ,
 
                       );

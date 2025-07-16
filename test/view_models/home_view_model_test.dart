@@ -20,7 +20,7 @@ void main() {
       );
 
       await homeViewModel.load;
-      expect(homeViewModel.tasks.length, 1);
+      expect(homeViewModel.tasks.length, 3);
     });
 
     /*

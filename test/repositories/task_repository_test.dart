@@ -109,5 +109,32 @@ void main() {
       }
 
     });
+
+    test('should update the lastCompletedDate', () async {
+
+      Result result = await taskRepository.getTaskList();
+
+      switch (result) {
+        case Ok():
+          List<TaskEntity> tasks = result.value;
+
+          int taskId = tasks[0].id ?? 0;
+          Result resultCompleteTask = await taskRepository.completeTask(tasks[0]);
+
+          switch (resultCompleteTask) {
+            case Ok():
+              expect(resultCompleteTask.value, taskId);
+            case Error():
+              {
+                throw(Exception('Testing Error 1!'));
+              }
+          }
+
+        case Error():
+          {
+            throw(Exception('Testing Error 2!'));
+          }
+      }
+    });
   });
 }
