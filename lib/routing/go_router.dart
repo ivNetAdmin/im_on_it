@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../ui/completedTasks/widgets/completed_tasks_screen.dart';
+import '../ui/completed_tasks/widgets/completed_tasks_screen.dart';
 import '../ui/home/home_view_model.dart';
 import '../ui/home/widgets/home_screen.dart';
 import '../ui/settings/widgets/settings_screen.dart';

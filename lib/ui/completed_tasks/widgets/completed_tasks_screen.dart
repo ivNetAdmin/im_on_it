@@ -2,15 +2,21 @@
 
 import 'package:flutter/material.dart';
 
+import '../../shared_widgets/shared_app_bar.dart';
+
 class CompletedTasksScreen extends StatelessWidget {
-  CompletedTasksScreen({super.key});
+  const CompletedTasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.blueGrey[100],
         body: SafeArea(
-          child: Text('Completed Tasks'),
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SharedAppBar(),
+            ],
+          ),
         )
     );
   }
