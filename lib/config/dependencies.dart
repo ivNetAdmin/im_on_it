@@ -5,7 +5,9 @@ import 'package:provider/single_child_widget.dart';
 import '../data/repository/prod/task_repository.dart';
 import '../data/repository/task_repository_interface.dart';
 //import '../data/services/dev/task_service.dart';
+import '../data/services/prod/task_log_service.dart';
 import '../data/services/prod/task_service.dart';
+import '../data/services/task_log_service_interface.dart';
 import '../data/services/task_service_interface.dart';
 
 List<SingleChildWidget> get providers {
@@ -13,9 +15,12 @@ List<SingleChildWidget> get providers {
     Provider.value(
       value: TaskService() as TaskServiceInterface,
     ),
+    Provider.value(
+      value: TaskLogService() as TaskLogServiceInterface,
+    ),
     Provider(
         create: (context) =>
-        TaskRepository(taskService: context.read(),) as TaskRepositoryInterface
+        TaskRepository(taskService: context.read(), taskLogService: context.read(),) as TaskRepositoryInterface
     ),
   ];
 }

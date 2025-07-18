@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../domain/enums/menu_value_enum.dart';
 import '../home_view_model.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,12 +15,46 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blueGrey[100],
       body: SafeArea(
         child: ListenableBuilder(
             listenable: viewModel,
             builder: (context, _) {
               return CustomScrollView(
                 slivers: <Widget>[
+                  SliverAppBar(
+                    title: Text("I'm On It, Okay"),
+                    floating: false,
+                    pinned: true,
+                    backgroundColor: Colors.blueGrey[100],
+                    actions: [
+                      PopupMenuButton<MenuValueEnum>(
+                          onSelected: (value) {
+
+                            context.go('/completed-tasks');
+
+                          },
+                          itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<MenuValueEnum>>[
+                            PopupMenuItem<MenuValueEnum>(
+                              value: MenuValueEnum.settings,
+                              child: const ListTile(
+                              leading: Icon(Icons.settings),
+                              title: Text('Settings'),
+                            ),
+                            ),
+
+                            const PopupMenuItem<MenuValueEnum>(
+                              value: MenuValueEnum.completedTasks,
+                              child: ListTile(
+                              leading: Icon(Icons.done),
+                              title: Text('Completed Tasks'),
+                            ),
+                            ),
+                          ]
+                      )
+                    ],
+                  ),
                   SliverToBoxAdapter(
                     child: Container(
                       //color: Colors.yellow,
@@ -29,7 +65,9 @@ class HomeScreen extends StatelessWidget {
                         child: TextField(
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'New Task Description'),
+                                labelText: 'New Task Description',
+                                fillColor: Colors.white,
+                                filled: true),
                             controller: descriptionTextController,
                             onChanged: (String value) async {
                               viewModel.setNewTaskDescription(value);
@@ -164,16 +202,21 @@ class HomeScreen extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       //itemBuilder: (_, index) => Text('${viewModel.tasks[index].timeSpan} ${viewModel.tasks[index].lastCompletedDate} ${viewModel.tasks[index].displayTimeLapsed()} ${viewModel.tasks[index].type} ${viewModel.tasks[index].description} ${viewModel.tasks[index].description}')
                       return ListTile(
-                          leading: CircleAvatar(child: Icon(viewModel.getTypeIcon(viewModel.tasks[index].type))),
-                          title: Text('${viewModel.tasks[index].description} ${viewModel.tasks[index].id} ${viewModel.tasks[index].repeat}'),
-                          subtitle: Text(viewModel.tasks[index].targetDateFormatted()),
-                          trailing: Icon(Icons.keyboard_double_arrow_right),
-                        onTap: (){
+                        leading: CircleAvatar(child: Icon(viewModel.getTypeIcon(
+                            viewModel.tasks[index].type))),
+                        title: Text('${viewModel.tasks[index]
+                            .description} ${viewModel.tasks[index]
+                            .id} ${viewModel.tasks[index].repeat}'),
+                        subtitle: Text(viewModel.tasks[index]
+                            .targetDateFormatted()),
+                        //subtitle: Text(viewModel.tasks[index].targetDateFormatted() + ' * ' + viewModel.tasks[index].createDate.toString() + ' ' + viewModel.tasks[index].lastCompletedDate.toString()),
+                        trailing: Icon(Icons.keyboard_double_arrow_right),
+                        onTap: () {
                           viewModel.editTask(viewModel.tasks[index]);
-                            },
+                        },
                         onLongPress: () {
                           viewModel.completeTask(viewModel.tasks[index]);
-                        } ,
+                        },
 
                       );
                     },

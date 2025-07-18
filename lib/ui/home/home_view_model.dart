@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:im_on_it/data/entities/task_entity.dart';
 
@@ -241,8 +243,9 @@ class HomeViewModel extends ChangeNotifier {
     switch(result)
     {
       case Ok<int>():
-        //_errorMessage = result.value.toString();
+        _errorMessage = 'task added';
         _load();
+        Timer(const Duration(seconds: 3), clearMessage);
       case Error<int>():
         _errorMessage = result.toString();
     }
@@ -252,6 +255,7 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> editTask(Task task) async {
     _errorMessage = 'task edit';
     notifyListeners();
+    Timer(const Duration(seconds: 3), clearMessage);
   }
 
   Future<void> completeTask(Task task) async {
@@ -260,12 +264,13 @@ class HomeViewModel extends ChangeNotifier {
     switch(result)
     {
       case Ok<int>():
-      //_errorMessage = result.value.toString();
+        _errorMessage = 'task completed';
+        Timer(const Duration(seconds: 3), clearMessage);
         _load();
       case Error<int>():
         _errorMessage = result.toString();
     }
-    _errorMessage = 'task completed';
+
     notifyListeners();
   }
 
@@ -275,12 +280,13 @@ class HomeViewModel extends ChangeNotifier {
     switch(result)
     {
       case Ok<int>():
-      //_errorMessage = result.value.toString();
+        _errorMessage = 'task deleted';
         _load();
+        Timer(const Duration(seconds: 3), clearMessage);
       case Error<int>():
         _errorMessage = result.toString();
     }
-    _errorMessage = 'task deleted';
+
     notifyListeners();
   }
 
@@ -402,6 +408,11 @@ class HomeViewModel extends ChangeNotifier {
       return Icons.sentiment_satisfied_alt;
     }
     return Icons.notifications_active_outlined;
+  }
+
+  void clearMessage() {
+    _errorMessage = '';
+    notifyListeners();
   }
 }
 

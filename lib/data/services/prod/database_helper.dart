@@ -5,7 +5,7 @@ class DatabaseHelper {
   static const int _version = 1;
   static const String _dbName = 'ImOnIt.db';
 
-  static const String _dbSql = 'CREATE TABLE Task('
+  static const String _dbTaskTableSql = 'CREATE TABLE Task('
       'id INTEGER PRIMARY KEY,'
       'description TEXT NOT NULL,'
       'createDate INTEGER NOT NULL,'
@@ -14,8 +14,9 @@ class DatabaseHelper {
       'timeSpan TEXT NOT NULL,'
       'timePeriod TEXT NOT NULL,'
       'repeat INTEGER NOT NULL'
-      ');'
-      'CREATE TABLE Task('
+      ');';
+
+  static const String _dbTaskLogTableSql = 'CREATE TABLE TaskLog('
       'id INTEGER PRIMARY KEY,'
       'description TEXT NOT NULL,'
       'lastCompletedDate INTEGER NOT NULL,'
@@ -23,12 +24,14 @@ class DatabaseHelper {
       ');';
 
   static Future<Database> _getDb() async {
-
     return openDatabase(join(await getDatabasesPath(), _dbName),
-        onCreate: (db, version) async =>
-        await db.execute(_dbSql),
-        version: _version
-    );
+      onCreate: (db, version) {
+        db.execute(_dbTaskTableSql);
+        return db.execute(_dbTaskLogTableSql);
+      },
+      // Set the version. This runs the onCreate function and provides a
+      // path to perform updates and downgrades on the database.
+      version: _version,);
   }
 
   static void deleteDb() async {
@@ -70,7 +73,7 @@ class DatabaseHelper {
 
   static Future<int> addTaskLog(Map<String, dynamic> taskLog) async {
     final db = await _getDb();
-    return await db.insert("Task", taskLog,
+    return await db.insert("TaskLog", taskLog,
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }
