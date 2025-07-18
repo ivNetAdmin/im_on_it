@@ -30,26 +30,29 @@ class HomeScreen extends StatelessWidget {
                     actions: [
                       PopupMenuButton<MenuValueEnum>(
                           onSelected: (value) {
-
-                            context.go('/completed-tasks');
-
+                            switch (value) {
+                              case MenuValueEnum.settings:
+                                context.go('/settings');
+                              case MenuValueEnum.completedTasks:
+                                context.go('/completed-tasks');
+                            }
                           },
                           itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<MenuValueEnum>>[
                             PopupMenuItem<MenuValueEnum>(
                               value: MenuValueEnum.settings,
                               child: const ListTile(
-                              leading: Icon(Icons.settings),
-                              title: Text('Settings'),
-                            ),
+                                leading: Icon(Icons.settings),
+                                title: Text('Settings'),
+                              ),
                             ),
 
                             const PopupMenuItem<MenuValueEnum>(
                               value: MenuValueEnum.completedTasks,
                               child: ListTile(
-                              leading: Icon(Icons.done),
-                              title: Text('Completed Tasks'),
-                            ),
+                                leading: Icon(Icons.done),
+                                title: Text('Completed Tasks'),
+                              ),
                             ),
                           ]
                       )
@@ -64,7 +67,9 @@ class HomeScreen extends StatelessWidget {
                         width: 250,
                         child: TextField(
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
                                 labelText: 'New Task Description',
                                 fillColor: Colors.white,
                                 filled: true),
