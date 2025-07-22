@@ -1,8 +1,8 @@
 import 'package:im_on_it/utils/result.dart';
 
 import '../../entities/task_entity.dart';
-import '../../entities/task_entity_log.dart';
-import '../../services/task_log_service_interface.dart';
+import '../../entities/task_history_entity.dart';
+import '../../services/task_history_service_interface.dart';
 import '../../services/task_service_interface.dart';
 import '../task_repository_interface.dart';
 
@@ -10,11 +10,11 @@ class TaskRepository implements TaskRepositoryInterface {
 
   TaskRepository({
     required TaskServiceInterface taskService,
-    required TaskLogServiceInterface taskLogService,
-  }) : _taskService = taskService, _taskLogService = taskLogService;
+    required TaskHistoryServiceInterface taskHistoryService,
+  }) : _taskService = taskService, _taskHistoryService = taskHistoryService;
 
   final TaskServiceInterface _taskService;
-  final TaskLogServiceInterface _taskLogService;
+  final TaskHistoryServiceInterface _taskHistoryService;
 
   @override
   Future<Result<List<TaskEntity>>> getTaskList() async {
@@ -45,14 +45,14 @@ class TaskRepository implements TaskRepositoryInterface {
     try {
       int rowId = 0;
       // add completed task to taskLog repository
-      TaskEntityLog taskEntityLog = TaskEntityLog(
+      TaskHistoryEntity taskEntityHistory = TaskHistoryEntity(
         id: task.id,
         description: '${task.description} [${task.type} ${task.timePeriod} ${task.repeat == 0 ? 'no-repeat' : 'repeat'}]',  //'My first task! [fun d3 no-repeat]',
         lastCompletedDate: task.lastCompletedDate,
         lapsed: 0,
       );
 
-      rowId = await _taskLogService.addNewTaskLog(taskEntityLog);
+      rowId = await _taskHistoryService.addNewTaskHistory(taskEntityHistory);
 
       if(task.repeat==1) {
         //if task is repeat then update last completed date for current task
@@ -75,6 +75,15 @@ class TaskRepository implements TaskRepositoryInterface {
       return Result.ok(rowId);
     } on Exception catch (exception) {
       return Result.error(exception);
+    }
+  }
+
+  @override
+  Future<Result<List<TaskHistoryEntity>>> getTaskHistoryList() async {
+    try {
+      return Result.ok(await _taskHistoryService.getAllTaskHistory());
+    } on Error catch (error) {
+      return Result.error(error as Exception);
     }
   }
 }

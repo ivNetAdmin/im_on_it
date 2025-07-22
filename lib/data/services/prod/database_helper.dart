@@ -16,7 +16,7 @@ class DatabaseHelper {
       'repeat INTEGER NOT NULL'
       ');';
 
-  static const String _dbTaskLogTableSql = 'CREATE TABLE TaskLog('
+  static const String _dbTaskHistoryTableSql = 'CREATE TABLE TaskHistory('
       'id INTEGER PRIMARY KEY,'
       'description TEXT NOT NULL,'
       'lastCompletedDate INTEGER NOT NULL,'
@@ -27,7 +27,7 @@ class DatabaseHelper {
     return openDatabase(join(await getDatabasesPath(), _dbName),
       onCreate: (db, version) {
         db.execute(_dbTaskTableSql);
-        return db.execute(_dbTaskLogTableSql);
+        return db.execute(_dbTaskHistoryTableSql);
       },
       // Set the version. This runs the onCreate function and provides a
       // path to perform updates and downgrades on the database.
@@ -65,15 +65,15 @@ class DatabaseHelper {
     return await db.query("Task");
   }
 
-  static Future<List<Map<String, dynamic>>> getAllTaskLog() async {
+  static Future<List<Map<String, dynamic>>> getAllTaskHistory() async {
     final db = await _getDb();
 
-    return await db.query("TaskLog");
+    return await db.query("TaskHistory");
   }
 
-  static Future<int> addTaskLog(Map<String, dynamic> taskLog) async {
+  static Future<int> addTaskHistory(Map<String, dynamic> taskHistory) async {
     final db = await _getDb();
-    return await db.insert("TaskLog", taskLog,
+    return await db.insert("TaskHistory", taskHistory,
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

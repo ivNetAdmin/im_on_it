@@ -1,4 +1,5 @@
 import 'package:im_on_it/data/entities/task_entity.dart';
+import 'package:im_on_it/data/entities/task_history_entity.dart';
 import 'package:im_on_it/data/repository/task_repository_interface.dart';
 import 'package:im_on_it/data/services/task_service_interface.dart';
 import 'package:im_on_it/utils/result.dart';
@@ -68,5 +69,11 @@ class FakeTaskRepository implements TaskRepositoryInterface {
     } catch (error) {
       return Result.error(error as Exception);
     }
+  }
+
+  @override
+  Future<Result<List<TaskHistoryEntity>>> getTaskHistoryList() {
+    // TODO: implement getCompletedTaskList
+    throw UnimplementedError();
   }
 }

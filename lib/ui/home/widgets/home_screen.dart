@@ -3,8 +3,8 @@ import '../../shared_widgets/shared_app_bar.dart';
 import '../home_view_model.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key
-    , required this.viewModel
+  HomeScreen({super.key,
+    required this.viewModel
   });
 
   final descriptionTextController = TextEditingController();

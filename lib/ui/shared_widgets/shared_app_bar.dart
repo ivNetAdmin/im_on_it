@@ -12,7 +12,7 @@ class SharedAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: Text("I'm On It, Okay"),
+      title: Text("I'm On It, Ok!"),
       floating: false,
       pinned: true,
       backgroundColor: Colors.blueGrey[100],
@@ -41,7 +41,7 @@ class SharedAppBar extends StatelessWidget {
                 value: MenuValueEnum.completedTasks,
                 child: ListTile(
                   leading: Icon(Icons.done),
-                  title: Text('C O M P L E T E D  T A S K S'),
+                  title: Text('T A S K  H I S T O R Y'),
                 ),
               ),
               PopupMenuItem<MenuValueEnum>(

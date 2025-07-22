@@ -1,13 +1,13 @@
-import 'package:im_on_it/data/entities/task_entity_log.dart';
+import 'package:im_on_it/data/entities/task_history_entity.dart';
 
-List<TaskEntityLog> createTaskLogList() {
+List<TaskHistoryEntity> createTaskHistoryList() {
 
   int now = DateTime.now().microsecondsSinceEpoch;
 
-  final taskLogs = List<TaskEntityLog>.empty(growable: true);
+  final taskHistory = List<TaskHistoryEntity>.empty(growable: true);
 
-  taskLogs.add(
-    TaskEntityLog(
+  taskHistory.add(
+    TaskHistoryEntity(
       id: 1,
       description: 'My first task! [fun d3 no-repeat]',
       lastCompletedDate: now,
@@ -15,8 +15,8 @@ List<TaskEntityLog> createTaskLogList() {
     ),
   );
 
-  taskLogs.add(
-    TaskEntityLog(
+  taskHistory.add(
+    TaskHistoryEntity(
       id: 2,
       description: 'My next task! [chore w wd repeat]',
       lastCompletedDate: now,
@@ -24,8 +24,8 @@ List<TaskEntityLog> createTaskLogList() {
     ),
   );
 
-  taskLogs.add(
-      TaskEntityLog(
+  taskHistory.add(
+      TaskHistoryEntity(
         id: 3,
         description: 'My next next task! [yes_dear m no-repeat]',
         lastCompletedDate: now,
@@ -33,5 +33,5 @@ List<TaskEntityLog> createTaskLogList() {
       ),
   );
 
-  return taskLogs;
+  return taskHistory;
 }

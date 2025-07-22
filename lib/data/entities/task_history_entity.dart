@@ -1,12 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'task_entity_log.freezed.dart';
-part 'task_entity_log.g.dart';
+part 'task_history_entity.freezed.dart';
+part 'task_history_entity.g.dart';
 
 @freezed
-abstract class TaskEntityLog with _$TaskEntityLog {
+abstract class TaskHistoryEntity with _$TaskHistoryEntity {
 
-  const factory TaskEntityLog({
+  const factory TaskHistoryEntity({
     /// Optional ID of the task.
     /// May be null if the task is not yet stored.
     int? id,
@@ -21,9 +21,9 @@ abstract class TaskEntityLog with _$TaskEntityLog {
     /// task repeat: yes/no
     required int lapsed,
 
-  }) = _TaskEntityLog;
+  }) = _TaskHistoryEntity;
 
-  factory TaskEntityLog.fromJson(Map<String, dynamic> json) =>
-      _$TaskEntityLogFromJson(json);
+  factory TaskHistoryEntity.fromJson(Map<String, dynamic> json) =>
+      _$TaskHistoryEntityFromJson(json);
 
 }
