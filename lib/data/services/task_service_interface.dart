@@ -3,6 +3,7 @@ import '../entities/task_entity.dart';
 
 abstract class TaskServiceInterface {
   Future<List<TaskEntity>> getTaskList();
+  Future<TaskEntity> getTask(int taskId);
   Future<int>addNewTask(TaskEntity newTask);
   Future<int>updateTask(TaskEntity task);
   Future<int>deleteTask(TaskEntity task);

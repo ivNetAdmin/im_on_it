@@ -47,4 +47,10 @@ class FakeTaskService implements TaskServiceInterface {
     }
     return taskId;
   }
+
+  @override
+  Future<TaskEntity> getTask(int taskId) {
+    // TODO: implement getTask
+    throw UnimplementedError();
+  }
 }

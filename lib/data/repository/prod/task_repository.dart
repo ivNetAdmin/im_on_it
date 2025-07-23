@@ -1,5 +1,7 @@
 import 'package:im_on_it/utils/result.dart';
 
+import '../../../ui/home/helpers/date_format_helper.dart';
+import '../../../ui/home/helpers/home_view_model_helper.dart';
 import '../../entities/task_entity.dart';
 import '../../entities/task_history_entity.dart';
 import '../../services/task_history_service_interface.dart';
@@ -11,7 +13,9 @@ class TaskRepository implements TaskRepositoryInterface {
   TaskRepository({
     required TaskServiceInterface taskService,
     required TaskHistoryServiceInterface taskHistoryService,
-  }) : _taskService = taskService, _taskHistoryService = taskHistoryService;
+  })
+      : _taskService = taskService,
+        _taskHistoryService = taskHistoryService;
 
   final TaskServiceInterface _taskService;
   final TaskHistoryServiceInterface _taskHistoryService;
@@ -41,25 +45,29 @@ class TaskRepository implements TaskRepositoryInterface {
   }
 
   @override
-  Future<Result<int>> completeTask(TaskEntity task) async {
+  Future<Result<int>> completeTask(int taskId) async {
     try {
       int rowId = 0;
+      int now = DateFormatHelper.fromDate(DateTime.now());
+
+      TaskEntity task = await _taskService.getTask(taskId);
+
       // add completed task to taskLog repository
-      TaskHistoryEntity taskEntityHistory = TaskHistoryEntity(
-        id: task.id,
-        description: '${task.description} [${task.type} ${task.timePeriod} ${task.repeat == 0 ? 'no-repeat' : 'repeat'}]',  //'My first task! [fun d3 no-repeat]',
-        lastCompletedDate: task.lastCompletedDate,
-        lapsed: 0,
-      );
+      TaskHistoryEntity taskEntityHistory = HomeViewModelHelper
+          .setNewTaskHistoryEntityDate(task, now);
 
       rowId = await _taskHistoryService.addNewTaskHistory(taskEntityHistory);
 
-      if(task.repeat==1) {
+      // add completed task to taskLog repository
+      TaskEntity taskEntity = HomeViewModelHelper.setNewTaskEntityDate(
+          task, now);
+
+      if (task.repeat == 1) {
         //if task is repeat then update last completed date for current task
-        rowId = await _taskService.updateTask(task);
-      }else{
+        rowId = await _taskService.updateTask(taskEntity);
+      } else {
         // if task is not repeat then then delete the current task
-        rowId = await _taskService.deleteTask(task);
+        rowId = await _taskService.deleteTask(taskEntity);
       }
 
       return Result.ok(rowId);

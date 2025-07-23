@@ -119,7 +119,7 @@ void main() {
           List<TaskEntity> tasks = result.value;
 
           int taskId = tasks[0].id ?? 0;
-          Result resultCompleteTask = await taskRepository.completeTask(tasks[0]);
+          Result resultCompleteTask = await taskRepository.completeTask(taskId);
 
           switch (resultCompleteTask) {
             case Ok():

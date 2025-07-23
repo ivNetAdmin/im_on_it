@@ -9,8 +9,14 @@ List<TaskHistoryEntity> createTaskHistoryList() {
   taskHistory.add(
     TaskHistoryEntity(
       id: 1,
-      description: 'My first task! [fun d3 no-repeat]',
+      taskId: 1,
+      description: 'My first task!',
+      createDate: now,
       lastCompletedDate: now,
+      type: 'fun',
+      timeSpan: 'd3',
+      timePeriod: 'd',
+      repeat: 0,
       lapsed: 0,
     ),
   );
@@ -18,8 +24,14 @@ List<TaskHistoryEntity> createTaskHistoryList() {
   taskHistory.add(
     TaskHistoryEntity(
       id: 2,
-      description: 'My next task! [chore w wd repeat]',
+      taskId: 2,
+      description: 'My next task!',
+      createDate: now,
       lastCompletedDate: now,
+      type: 'chore',
+      timeSpan: 'w',
+      timePeriod: 'wd',
+      repeat: 1,
       lapsed: 1,
     ),
   );
@@ -27,8 +39,14 @@ List<TaskHistoryEntity> createTaskHistoryList() {
   taskHistory.add(
       TaskHistoryEntity(
         id: 3,
-        description: 'My next next task! [yes_dear m no-repeat]',
+        taskId: 3,
+        description: 'My next next task!',
+        createDate: now,
         lastCompletedDate: now,
+        type: 'yes_dear',
+        timeSpan: 'm',
+        timePeriod: 'we',
+        repeat: 0,
         lapsed: 0,
       ),
   );

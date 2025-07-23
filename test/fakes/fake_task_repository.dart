@@ -42,11 +42,10 @@ class FakeTaskRepository implements TaskRepositoryInterface {
   }
 
   @override
-  Future<Result<int>> completeTask(TaskEntity task) async {
+  Future<Result<int>> completeTask(int taskId) async {
     try {
       List<TaskEntity> tasks = await _taskService.getTaskList();
 
-      var taskId = task.id ?? 0;
       for (var i = 0; i < tasks.length; i++) {
         if (tasks[i].id == taskId) {
           TaskEntity updatedTask = TaskEntity(

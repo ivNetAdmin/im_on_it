@@ -1,3 +1,4 @@
+import 'package:im_on_it/data/entities/task_entity.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -18,8 +19,14 @@ class DatabaseHelper {
 
   static const String _dbTaskHistoryTableSql = 'CREATE TABLE TaskHistory('
       'id INTEGER PRIMARY KEY,'
+      'taskId INTEGER NOT NULL,'
       'description TEXT NOT NULL,'
+      'createDate INTEGER NOT NULL,'
       'lastCompletedDate INTEGER NOT NULL,'
+      'type TEXT NOT NULL,'
+      'timeSpan TEXT NOT NULL,'
+      'timePeriod TEXT NOT NULL,'
+      'repeat INTEGER NOT NULL,'
       'lapsed INTEGER NOT NULL'
       ');';
 
@@ -64,6 +71,16 @@ class DatabaseHelper {
 
     return await db.query("Task");
   }
+
+  static Future<Map<String, Object?>> getTask(int taskId) async {
+    final db = await _getDb();
+    final rows = await db.query("Task",
+        where: 'id = ?',
+        whereArgs: [taskId]);
+
+    return rows.first;
+  }
+
 
   static Future<List<Map<String, dynamic>>> getAllTaskHistory() async {
     final db = await _getDb();

@@ -24,7 +24,13 @@ void main() {
 
       TaskHistoryEntity newTaskHistory = TaskHistoryEntity(
         id: 4,
-        description: 'My new task history! [fun d3 no-repeat]',
+        taskId: 4,
+        createDate: now,
+        type: 'fun',
+        timeSpan: 'd3',
+        timePeriod: 'd',
+        repeat: 0,
+        description: 'My new task history!',
         lastCompletedDate: now,
         lapsed: 0,
       );
@@ -35,6 +41,5 @@ void main() {
       expect(rowId, 4);
       expect(taskHistoryList.length, 4);
     });
-
   });
 }

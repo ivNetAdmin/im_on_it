@@ -27,7 +27,7 @@ class TaskHistoryScreen extends StatelessWidget {
                         itemCount: viewModel.taskHistoryList.length,
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
-                              title:Text(viewModel.taskHistoryList[index].description),
+                              title:Text(viewModel.taskHistoryList[index].taskId.toString() + ' ' + viewModel.taskHistoryList[index].description + ' ' + viewModel.taskHistoryList[index].lastCompletedDate.toString()),
                           );
                         }
                     ),

@@ -6,7 +6,7 @@ import '../entities/task_history_entity.dart';
 abstract class TaskRepositoryInterface{
   Future<Result<List<TaskEntity>>> getTaskList();
   Future<Result<int>>addNewTask(TaskEntity newTask);
-  Future<Result<int>>completeTask(TaskEntity task);
+  Future<Result<int>>completeTask(int taskId);
   Future<Result<int>>deleteTask(TaskEntity task);
 
   Future<Result<List<TaskHistoryEntity>>> getTaskHistoryList();

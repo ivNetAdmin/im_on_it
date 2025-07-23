@@ -45,8 +45,8 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<Result<void>> _load() async {
     try {
-      setInitialButtonColours();
       _selectedStartDate = DateTime(1958, 12, 18);
+      setInitialButtonColours();
 
       final result = await _taskRepository.getTaskList();
       switch (result) {
@@ -200,7 +200,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void setNewTaskDate(DateTime selectedDate) {
-    _newTask = Task(
+     _newTask = Task(
       id: _newTask.id,
       description: _newTask.description,
       createDate: selectedDate,
@@ -213,13 +213,6 @@ class HomeViewModel extends ChangeNotifier {
     _selectedStartDate = selectedDate;
 
     notifyListeners();
-  }
-
-  String showNewTaskOptionStartDate() {
-    if (_selectedStartDate == DateTime(1958, 12, 18)) {
-      return 'Optional Start Date';
-    }
-    return 'Start Date ${formatDate(_selectedStartDate)}';
   }
 
   void setNewTaskDescription(String value) {
@@ -239,6 +232,8 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> saveNewTask() async {
 
     final result = await _taskRepository.addNewTask(mapTaskEntity(_newTask));
+
+    _currentTaskRepeatStatus = false;
 
     switch(result)
     {
@@ -260,7 +255,7 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> completeTask(Task task) async {
 
-    final result = await _taskRepository.completeTask(mapTaskEntityCompletedDate(task));
+    final result = await _taskRepository.completeTask(task.id??0);
     switch(result)
     {
       case Ok<int>():
@@ -336,6 +331,13 @@ class HomeViewModel extends ChangeNotifier {
     );
 
     notifyListeners();
+  }
+
+  String showNewTaskOptionStartDate() {
+    if (_selectedStartDate == DateTime(1958, 12, 18)) {
+      return 'Optional Start Date';
+    }
+    return 'Start Date ${formatDate(_selectedStartDate)}';
   }
 
   Color getDateButtonColour() {
