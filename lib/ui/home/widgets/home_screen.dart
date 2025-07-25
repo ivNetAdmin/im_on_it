@@ -7,8 +7,8 @@ class HomeScreen extends StatelessWidget {
     required this.viewModel
   });
 
-  final descriptionTextController = TextEditingController();
 
+  final descriptionTextController = TextEditingController();
   final HomeViewModel viewModel;
 
   @override
@@ -18,7 +18,9 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: ListenableBuilder(
             listenable: viewModel,
+
             builder: (context, _) {
+              descriptionTextController.text=viewModel.currentTaskDescription;
               return CustomScrollView(
                 slivers: <Widget>[
                   SharedAppBar(),
@@ -31,6 +33,7 @@ class HomeScreen extends StatelessWidget {
                       child: SizedBox(
                         width: 250,
                         child: TextField(
+
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
@@ -38,10 +41,11 @@ class HomeScreen extends StatelessWidget {
                                 labelText: 'New Task Description',
                                 fillColor: Colors.white,
                                 filled: true),
-                            controller: descriptionTextController,
+                            controller: descriptionTextController, //TextEditingController()..text=viewModel.currentTaskDescription,
+
                             onChanged: (String value) async {
                               viewModel.setNewTaskDescription(value);
-                            }
+                            },
                         ),
                       ),
                     ),
@@ -160,7 +164,7 @@ class HomeScreen extends StatelessWidget {
                             foregroundColor: Colors.white,
                             backgroundColor: Colors.black45,
                           ),
-                          onPressed: descriptionTextController.text.isEmpty
+                          onPressed: viewModel.currentTaskDescription.isEmpty
                               ? null
                               : () {
                             viewModel.saveNewTask();

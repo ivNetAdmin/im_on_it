@@ -43,6 +43,9 @@ class HomeViewModel extends ChangeNotifier {
 
   DateTime _selectedStartDate = DateTime.now();
 
+  String _currentTaskDescription='';
+  String get currentTaskDescription => _currentTaskDescription;
+
   Future<Result<void>> _load() async {
     try {
       _selectedStartDate = DateTime(1958, 12, 18);
@@ -226,19 +229,23 @@ class HomeViewModel extends ChangeNotifier {
       timePeriod: _newTask.timePeriod,
       repeat: _newTask.repeat,
     );
+    _currentTaskDescription = value;
     notifyListeners();
   }
 
   Future<void> saveNewTask() async {
 
+    _errorMessage = _newTask.description == 'deleteDb' ? 'db deleted' : 'task added';
+
     final result = await _taskRepository.addNewTask(mapTaskEntity(_newTask));
 
     _currentTaskRepeatStatus = false;
+    _currentTaskDescription = '';
+    _newTask = HomeViewModelHelper.newTask;
 
     switch(result)
     {
       case Ok<int>():
-        _errorMessage = 'task added';
         _load();
         Timer(const Duration(seconds: 3), clearMessage);
       case Error<int>():
@@ -249,6 +256,24 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> editTask(Task task) async {
     _errorMessage = 'task edit';
+
+    _newTask = Task(
+      id: task.id,
+      description: task.description,
+      createDate: task.createDate,
+      lastCompletedDate: task.lastCompletedDate,
+      type: task.type,
+      timeSpan: task.timeSpan,
+      timePeriod: task.timePeriod,
+      repeat: task.repeat,
+    );
+
+    setCurrentTaskButtonColours();
+
+    _currentTaskRepeatStatus=task.repeat;
+
+    _currentTaskDescription =  task.description;
+
     notifyListeners();
     Timer(const Duration(seconds: 3), clearMessage);
   }
@@ -415,6 +440,48 @@ class HomeViewModel extends ChangeNotifier {
   void clearMessage() {
     _errorMessage = '';
     notifyListeners();
+  }
+
+  void setCurrentTaskButtonColours() async {
+    setInitialButtonColours();
+
+    _buttonColours[0]=Colors.green;
+    switch(_newTask.type) {
+      case "chore":
+        _buttonColours[0]=Colors.green.shade200;
+      case "fun":
+        _buttonColours[1]=Colors.green.shade200;
+      case "yes_dear":
+        _buttonColours[2]=Colors.green.shade200;
+    }
+
+    _buttonColours[3]=Colors.blue;
+    switch(_newTask.timeSpan) {
+      case "d3":
+        _buttonColours[3] = Colors.blue.shade200;
+      case "w":
+        _buttonColours[4] = Colors.blue.shade200;
+      case "w2":
+        _buttonColours[5] = Colors.blue.shade200;
+      case "m":
+        _buttonColours[7] = Colors.blue.shade200;
+      case "m3":
+        _buttonColours[8] = Colors.blue.shade200;
+      case "m6":
+        _buttonColours[10] = Colors.blue.shade200;
+      case "y":
+        _buttonColours[11] = Colors.blue.shade200;
+    }
+
+    _buttonColours[12]=Colors.orange;
+    switch(_newTask.timePeriod) {
+      case "d":
+        _buttonColours[12]=Colors.orange.shade200;
+      case "wd":
+        _buttonColours[13]=Colors.orange.shade200;
+      case "we":
+        _buttonColours[14]=Colors.orange.shade200;
+    }
   }
 }
 
