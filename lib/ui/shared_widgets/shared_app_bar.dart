@@ -12,10 +12,15 @@ class SharedAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      shape: Border(
+        bottom: BorderSide(
+            color: Colors.grey
+        ),
+      ),
       title: Text("I'm On It, Ok!"),
       floating: false,
       pinned: true,
-      backgroundColor: Colors.blueGrey[100],
+      backgroundColor: Colors.blueGrey.shade50,
       actions: [
         PopupMenuButton<MenuValueEnum>(
             onSelected: (value) {

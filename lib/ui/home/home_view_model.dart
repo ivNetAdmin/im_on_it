@@ -235,12 +235,13 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> saveNewTask() async {
 
-    _errorMessage = _newTask.description == 'deleteDb' ? 'db deleted' : 'task added';
+    _errorMessage = _newTask.description == 'deleteDb' ? 'db deleted' : 'task updated';
 
     final result = await _taskRepository.addNewTask(mapTaskEntity(_newTask));
 
     _currentTaskRepeatStatus = false;
     _currentTaskDescription = '';
+    _newTask = HomeViewModelHelper.newTask;
     _newTask = HomeViewModelHelper.newTask;
 
     switch(result)
