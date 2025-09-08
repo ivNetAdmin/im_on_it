@@ -15,7 +15,7 @@ class TaskHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blueGrey[100],
+        backgroundColor: Colors.blueGrey.shade50,
         body: SafeArea(
           child: ListenableBuilder(
               listenable: viewModel,
@@ -27,7 +27,23 @@ class TaskHistoryScreen extends StatelessWidget {
                         itemCount: viewModel.taskHistoryList.length,
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
-                              title:Text(viewModel.taskHistoryList[index].taskId.toString() + ' ' + viewModel.taskHistoryList[index].description + ' ' + viewModel.taskHistoryList[index].lastCompletedDate.toString()),
+                            shape: Border(
+                              bottom: BorderSide(
+                                  color: Colors.grey
+                              ),
+                            ),
+                            leading: CircleAvatar(child: Icon(viewModel.getTypeIcon(
+                                viewModel.taskHistoryList[index].type))),
+                            title: Text(viewModel.taskHistoryList[index].description + (viewModel
+                                .taskHistoryList[index].repeat == true ? ' (repeat)' : '')),
+                              subtitle:  Text(viewModel.taskHistoryList[index].lastCompletedDateFormatted()
+                                  + viewModel.taskHistoryList[index].timeSpanText()
+                                  + viewModel.taskHistoryList[index].timePeriodText()
+                              ),
+                            trailing: Icon(Icons.keyboard_double_arrow_right),
+                            onLongPress: () {
+                              viewModel.deleteTask(viewModel.taskHistoryList[index]);
+                            },
                           );
                         }
                     ),

@@ -1,11 +1,9 @@
-import 'package:flutter/src/widgets/icon_data.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/time_span_enum.dart';
 
 part 'task.freezed.dart';
 part 'task.g.dart';
-//f
 
 @freezed
 abstract class Task with _$Task {

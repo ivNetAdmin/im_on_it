@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../ui/shared_helpers/date_format_helper.dart';
+
 part 'task_history_entity.freezed.dart';
 part 'task_history_entity.g.dart';
 
