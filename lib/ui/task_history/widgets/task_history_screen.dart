@@ -42,10 +42,26 @@ class TaskHistoryScreen extends StatelessWidget {
                               ),
                             trailing: Icon(Icons.keyboard_double_arrow_right),
                             onLongPress: () {
-                              viewModel.deleteTask(viewModel.taskHistoryList[index]);
+                              viewModel.rescheduleTask(viewModel.taskHistoryList[index]);
                             },
                           );
                         }
+                    ),
+
+                    SliverToBoxAdapter(
+                      child: Container(
+                        //color: Colors.yellow,
+                        padding: const EdgeInsets.all(2.0),
+                        child: SizedBox(
+                          width: 250,
+                          child: viewModel.errorMessage.isNotEmpty
+                              ? Text(
+                            viewModel.errorMessage,
+                            style: TextStyle(color: Colors.red),
+                          )
+                              : SizedBox.shrink(),
+                        ),
+                      ),
                     ),
                   ],
                 );

@@ -1,3 +1,4 @@
+import 'package:im_on_it/utils/format_message.dart';
 import 'package:im_on_it/utils/result.dart';
 
 import '../../../ui/home/helpers/home_view_model_helper.dart';
@@ -26,6 +27,46 @@ class TaskRepository implements TaskRepositoryInterface {
       return Result.ok(await _taskService.getTaskList());
     } on Error catch (error) {
       return Result.error(error as Exception);
+    }
+  }
+
+  @override
+  Future<Result<TaskEntity>> getTask(int taskId) async {
+      return Result.ok(await _taskService.getTask(taskId));
+  }
+
+  @override
+  Future<Result<int>> rescheduleTask(int taskId) async {
+    try {
+      TaskEntity taskEntity = await _taskService.getTask(taskId);
+      return Result.error(Exception('"${taskEntity.description}" is already scheduled'));
+    } on Exception catch (exception) {
+      if (exception.getMessage.contains('Task entity not found')) {
+
+        try {
+          TaskHistoryEntity taskHistoryEntity = await _taskHistoryService
+              .getTaskHistoryEntityByTaskId(taskId);
+
+          DateTime now = DateTime.now();
+
+          TaskEntity taskEntity =
+          TaskEntity(createDate: now.microsecondsSinceEpoch,
+              lastCompletedDate: now.microsecondsSinceEpoch,
+              description: taskHistoryEntity.description,
+              type: taskHistoryEntity.type,
+              timeSpan: taskHistoryEntity.timeSpan,
+              timePeriod: taskHistoryEntity.timePeriod,
+              repeat: taskHistoryEntity.repeat,
+              id:taskHistoryEntity.taskId);
+
+          return addNewTask(taskEntity);
+
+        } on Exception catch (exception) {
+          return Result.error(exception);
+        }
+      } else {
+        rethrow;
+      }
     }
   }
 

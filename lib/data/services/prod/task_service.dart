@@ -19,9 +19,12 @@ class TaskService implements TaskServiceInterface {
 
   @override
   Future<TaskEntity> getTask(int taskId) async {
+    try{
     Map<String, Object?> entity = await DatabaseHelper.getTask(taskId);
-
     return TaskEntity.fromJson(entity);
+    } on Error catch (error) {
+      throw Exception(error.toString());
+    }
   }
 
   @override

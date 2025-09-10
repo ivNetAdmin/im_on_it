@@ -21,4 +21,14 @@ class TaskHistoryService implements TaskHistoryServiceInterface {
     return taskHistoryList;
   }
 
+  @override
+  Future<TaskHistoryEntity> getTaskHistoryEntityByTaskId(int taskId) async {
+    try{
+      Map<String, Object?> entity = await DatabaseHelper.getTaskHistoryEntityByTaskId(taskId);
+      return TaskHistoryEntity.fromJson(entity);
+    } on Error catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
 }

@@ -1,4 +1,3 @@
-import 'package:im_on_it/data/entities/task_entity.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -77,10 +76,12 @@ class DatabaseHelper {
     final rows = await db.query("Task",
         where: 'id = ?',
         whereArgs: [taskId]);
-
-    return rows.first;
+    if (rows.isNotEmpty) {
+      return rows.first;
+    }else{
+      throw UnsupportedError('Task entity not found [$taskId]');
+    }
   }
-
 
   static Future<List<Map<String, dynamic>>> getAllTaskHistory() async {
     final db = await _getDb();
@@ -92,5 +93,17 @@ class DatabaseHelper {
     final db = await _getDb();
     return await db.insert("TaskHistory", taskHistory,
         conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  static Future<Map<String, Object?>> getTaskHistoryEntityByTaskId(int taskId) async {
+    final db = await _getDb();
+    final rows = await db.query("TaskHistory",
+        where: 'taskId = ?',
+        whereArgs: [taskId]);
+    if (rows.isNotEmpty) {
+      return rows.first;
+    }else{
+      throw UnsupportedError('TaskHistory entity not found [$taskId]');
+    }
   }
 }

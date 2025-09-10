@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:im_on_it/utils/format_message.dart';
 
 import '../../data/entities/task_history_entity.dart';
 import '../../domain/models/task_history.dart';
@@ -16,6 +17,9 @@ class TaskHistoryViewModel extends ChangeNotifier {
       ..execute();
   }
 
+  String _errorMessage = '';
+  String get errorMessage => _errorMessage;
+
   final TaskRepositoryInterface _taskRepository;
 
   late Command0 loadCmd;
@@ -25,6 +29,11 @@ class TaskHistoryViewModel extends ChangeNotifier {
   List<TaskHistory> _taskHistoryList = [];
 
   List<TaskHistory> get taskHistoryList => _taskHistoryList;
+
+  void clearMessage() {
+    _errorMessage = '';
+    notifyListeners();
+  }
 
   Future<Result<void>> _load() async {
     try {
@@ -51,6 +60,7 @@ class TaskHistoryViewModel extends ChangeNotifier {
       taskHistoryList.add(
           TaskHistory(
             id: taskHistoryEntity.id,
+            taskId: taskHistoryEntity.taskId,
             createDate: DateTime.fromMicrosecondsSinceEpoch(
                 taskHistoryEntity.createDate),
             lastCompletedDate: DateTime.fromMicrosecondsSinceEpoch(
@@ -76,9 +86,35 @@ class TaskHistoryViewModel extends ChangeNotifier {
     return Icons.notifications_active_outlined;
   }
 
+  Future<void> rescheduleTask(TaskHistory taskHistory) async {
+    // Is this task a repeating task already scheduled
+    int originalTaskId = taskHistory.taskId;
+
+    try{
+
+    final result = await _taskRepository.rescheduleTask(originalTaskId);
+
+    switch(result)
+    {
+      case Ok<int>():
+       // TaskEntity originalTask = result.value;
+        _errorMessage = 'task rescheduled';
+      case Error<int>():
+        _errorMessage = result.error.getMessage;
+    }
+
+    } on Exception catch (exception) {
+      _errorMessage = exception.getMessage;
+    }
+
+    notifyListeners();
+    Timer(const Duration(seconds: 3), clearMessage);
+
+  }
+
   Future<void> deleteTask(TaskHistory taskHistory) async {
 
-    final result = await _taskRepository.getTaskHistoryList();
+   // final result = await _taskRepository.getTaskHistoryList();
     /*
     switch(result)
     {

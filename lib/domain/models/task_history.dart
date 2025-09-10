@@ -13,6 +13,9 @@ abstract class TaskHistory with _$TaskHistory {
     /// May be null if the task is not yet stored.
     int? id,
 
+    /// original task id
+    required int taskId,
+
     /// Date task was created
     required DateTime createDate,
 
