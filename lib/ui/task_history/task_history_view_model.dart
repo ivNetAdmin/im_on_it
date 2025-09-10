@@ -99,23 +99,23 @@ class TaskHistoryViewModel extends ChangeNotifier {
            case Ok<TaskEntity>():
              final message = '"${newTaskResult.value.description}" task has been rescheduled';
              if(context.mounted) {
-               SnackBarHelper.showFlashError(context, message);
+               SnackBarHelper.showFlashError(context, message, 'info');
              }
            case Error<TaskEntity>():
              if(context.mounted) {
-               SnackBarHelper.showFlashError(context, newTaskResult.error.getMessage);
+               SnackBarHelper.showFlashError(context, newTaskResult.error.getMessage, 'error');
              }
          }
 
       case Error<int>():
         if(context.mounted) {
-          SnackBarHelper.showFlashError(context, result.error.getMessage);
+          SnackBarHelper.showFlashError(context, result.error.getMessage, 'error');
         }
     }
 
     } on Exception catch (exception) {
       if(context.mounted) {
-        SnackBarHelper.showFlashError(context, exception.getMessage);
+        SnackBarHelper.showFlashError(context, exception.getMessage, 'error');
       }
     }
 
