@@ -9,6 +9,7 @@ import '../../domain/models/task_history.dart';
 import '../../utils/command.dart';
 import '../../data/repository/task_repository_interface.dart';
 import '../../utils/result.dart';
+import '../shared_helpers/snack_bar_helper.dart';
 
 class TaskHistoryViewModel extends ChangeNotifier {
   TaskHistoryViewModel({
@@ -69,14 +70,6 @@ class TaskHistoryViewModel extends ChangeNotifier {
     return taskHistoryList;
   }
 
-  void showFlashError(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
   IconData? getTypeIcon(String type) {
     switch(type) {
       case 'chore':
@@ -106,23 +99,23 @@ class TaskHistoryViewModel extends ChangeNotifier {
            case Ok<TaskEntity>():
              final message = '"${newTaskResult.value.description}" task has been rescheduled';
              if(context.mounted) {
-               showFlashError(context, message);
+               SnackBarHelper.showFlashError(context, message);
              }
            case Error<TaskEntity>():
              if(context.mounted) {
-               showFlashError(context, newTaskResult.error.getMessage);
+               SnackBarHelper.showFlashError(context, newTaskResult.error.getMessage);
              }
          }
 
       case Error<int>():
         if(context.mounted) {
-          showFlashError(context, result.error.getMessage);
+          SnackBarHelper.showFlashError(context, result.error.getMessage);
         }
     }
 
     } on Exception catch (exception) {
       if(context.mounted) {
-        showFlashError(context, exception.getMessage);
+        SnackBarHelper.showFlashError(context, exception.getMessage);
       }
     }
 

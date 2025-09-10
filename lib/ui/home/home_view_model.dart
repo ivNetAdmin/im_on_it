@@ -8,6 +8,7 @@ import '../../data/repository/task_repository_interface.dart';
 import '../../domain/models/task.dart';
 import '../../utils/command.dart';
 import '../../utils/result.dart';
+import '../shared_helpers/snack_bar_helper.dart';
 import 'helpers/home_view_model_helper.dart';
 
 class HomeViewModel extends ChangeNotifier {
@@ -234,7 +235,7 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> saveNewTask(BuildContext context) async {
 
     final message = _newTask.description == 'deleteDb' ? 'db deleted' : 'task updated';
-    showFlashError(context,message);
+    SnackBarHelper.showFlashError(context,message);
 
     final result = await _taskRepository.addNewTask(mapTaskEntity(_newTask));
 
@@ -249,7 +250,7 @@ class HomeViewModel extends ChangeNotifier {
         _load();
       case Error<int>():
         if(context.mounted) {
-          showFlashError(context, result.toString());
+          SnackBarHelper.showFlashError(context, result.toString());
         }
     }
     notifyListeners();
@@ -257,7 +258,7 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> editTask(BuildContext context, Task task) async {
     if(context.mounted) {
-      showFlashError(context, 'task edit');
+      SnackBarHelper.showFlashError(context, 'task edit');
     }
     _newTask = Task(
       id: task.id,
@@ -286,12 +287,12 @@ class HomeViewModel extends ChangeNotifier {
     {
       case Ok<int>():
         if(context.mounted) {
-          showFlashError(context, 'task completed');
+          SnackBarHelper.showFlashError(context, 'task completed');
         }
         _load();
       case Error<int>():
         if(context.mounted) {
-          showFlashError(context, result.toString());
+          SnackBarHelper.showFlashError(context, result.toString());
         }
     }
 
@@ -305,24 +306,16 @@ class HomeViewModel extends ChangeNotifier {
     {
       case Ok<int>():
         if(context.mounted) {
-          showFlashError(context, 'task deleted');
+          SnackBarHelper.showFlashError(context, 'task deleted');
         }
         _load();
       case Error<int>():
         if(context.mounted) {
-          showFlashError(context, result.toString());
+          SnackBarHelper.showFlashError(context, result.toString());
         }
     }
 
     notifyListeners();
-  }
-
-  void showFlashError(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
   }
 
   Future<void> setInitialButtonColours() async {
