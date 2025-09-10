@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:im_on_it/data/entities/task_entity.dart';
+import 'package:path/path.dart';
 
 import '../../data/repository/task_repository_interface.dart';
 import '../../domain/models/task.dart';
@@ -16,9 +17,6 @@ class HomeViewModel extends ChangeNotifier {
     loadCmd = Command0(_load)
       ..execute();
   }
-
-  String _errorMessage = '';
-  String get errorMessage => _errorMessage;
 
   final TaskRepositoryInterface _taskRepository;
 
@@ -233,9 +231,10 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveNewTask() async {
+  Future<void> saveNewTask(BuildContext context) async {
 
-    _errorMessage = _newTask.description == 'deleteDb' ? 'db deleted' : 'task updated';
+    final message = _newTask.description == 'deleteDb' ? 'db deleted' : 'task updated';
+    showFlashError(context,message);
 
     final result = await _taskRepository.addNewTask(mapTaskEntity(_newTask));
 
@@ -248,16 +247,18 @@ class HomeViewModel extends ChangeNotifier {
     {
       case Ok<int>():
         _load();
-        Timer(const Duration(seconds: 3), clearMessage);
       case Error<int>():
-        _errorMessage = result.toString();
+        if(context.mounted) {
+          showFlashError(context, result.toString());
+        }
     }
     notifyListeners();
   }
 
-  Future<void> editTask(Task task) async {
-    _errorMessage = 'task edit';
-
+  Future<void> editTask(BuildContext context, Task task) async {
+    if(context.mounted) {
+      showFlashError(context, 'task edit');
+    }
     _newTask = Task(
       id: task.id,
       description: task.description,
@@ -276,39 +277,52 @@ class HomeViewModel extends ChangeNotifier {
     _currentTaskDescription =  task.description;
 
     notifyListeners();
-    Timer(const Duration(seconds: 3), clearMessage);
   }
 
-  Future<void> completeTask(Task task) async {
+  Future<void> completeTask(BuildContext context, Task task) async {
 
     final result = await _taskRepository.completeTask(task.id??0);
     switch(result)
     {
       case Ok<int>():
-        _errorMessage = 'task completed';
-        Timer(const Duration(seconds: 3), clearMessage);
+        if(context.mounted) {
+          showFlashError(context, 'task completed');
+        }
         _load();
       case Error<int>():
-        _errorMessage = result.toString();
+        if(context.mounted) {
+          showFlashError(context, result.toString());
+        }
     }
 
     notifyListeners();
   }
 
-  Future<void> deleteTask(Task task) async {
+  Future<void> deleteTask(BuildContext context, Task task) async {
 
     final result = await _taskRepository.deleteTask(mapTaskEntity(task));
     switch(result)
     {
       case Ok<int>():
-        _errorMessage = 'task deleted';
+        if(context.mounted) {
+          showFlashError(context, 'task deleted');
+        }
         _load();
-        Timer(const Duration(seconds: 3), clearMessage);
       case Error<int>():
-        _errorMessage = result.toString();
+        if(context.mounted) {
+          showFlashError(context, result.toString());
+        }
     }
 
     notifyListeners();
+  }
+
+  void showFlashError(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   Future<void> setInitialButtonColours() async {
@@ -438,11 +452,6 @@ class HomeViewModel extends ChangeNotifier {
     return Icons.notifications_active_outlined;
   }
 
-  void clearMessage() {
-    _errorMessage = '';
-    notifyListeners();
-  }
-
   void setCurrentTaskButtonColours() async {
     setInitialButtonColours();
 
@@ -499,4 +508,3 @@ String formatDate(DateTime selectedStartDate) {
 
   return '$day-$month-${selectedStartDate.year}';
 }
-

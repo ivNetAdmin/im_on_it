@@ -139,24 +139,10 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),),
 
-                  SliverToBoxAdapter(
-                    child: Container(
-                      //color: Colors.yellow,
-                      padding: const EdgeInsets.all(2.0),
-                      child: SizedBox(
-                        width: 250,
-                        child: viewModel.errorMessage.isNotEmpty
-                            ? Text(
-                          viewModel.errorMessage,
-                          style: TextStyle(color: Colors.red),
-                        )
-                            : SizedBox.shrink(),
-                      ),
-                    ),
-                  ),
 
                   SliverToBoxAdapter(
                     child: Container(
+
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
@@ -164,6 +150,8 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+
+
                       //color: Colors.yellow,
                       padding: const EdgeInsets.all(8.0),
                       //child: Text('Optional Start Date', style: TextStyle(fontSize: 24)),
@@ -175,7 +163,10 @@ class HomeScreen extends StatelessWidget {
                           onPressed: viewModel.currentTaskDescription.isEmpty
                               ? null
                               : () {
-                            viewModel.saveNewTask();
+                            viewModel.saveNewTask(context);
+
+                            //viewModel.showFlashError(context, 'An error occurred. Please try again.');
+
                             descriptionTextController.clear();
                           },
                           child: Text('Save')
@@ -204,10 +195,10 @@ class HomeScreen extends StatelessWidget {
                             .targetDateFormatted()),
                         trailing: Icon(Icons.keyboard_double_arrow_right),
                         onTap: () {
-                          viewModel.editTask(viewModel.tasks[index]);
+                          viewModel.editTask(context, viewModel.tasks[index]);
                         },
                         onLongPress: () {
-                          viewModel.completeTask(viewModel.tasks[index]);
+                          viewModel.completeTask(context, viewModel.tasks[index]);
                         },
 
                       );
