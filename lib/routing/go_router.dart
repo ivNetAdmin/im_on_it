@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:im_on_it/domain/models/task_history.dart';
 import 'package:provider/provider.dart';
 
 import '../ui/home/home_view_model.dart';
@@ -6,6 +7,8 @@ import '../ui/home/widgets/home_screen.dart';
 import '../ui/settings/widgets/settings_screen.dart';
 import '../ui/task_history/task_history_view_model.dart';
 import '../ui/task_history/widgets/task_history_screen.dart';
+import '../ui/task_history_edit/task_history_edit_view_model.dart';
+import '../ui/task_history_edit/widgets/task_history_edit_screen.dart';
 
 GoRouter appRouter = GoRouter(
     routes: <RouteBase>[
@@ -22,7 +25,15 @@ GoRouter appRouter = GoRouter(
               final viewModel = TaskHistoryViewModel(taskRepository: context.read());
               return TaskHistoryScreen(viewModel: viewModel);
             },
-          ),GoRoute(
+          ),
+          GoRoute(
+              path: 'completed-tasks-edit/:taskId',
+              builder: (context, state) {
+                final viewModel = TaskHistoryEditViewModel(taskRepository: context.read());
+                return TaskHistoryEditScreen(viewModel: viewModel, taskId:state.pathParameters["taskId"]!);
+              },
+          ),
+          GoRoute(
             path: 'settings',
             builder: (context, state) {
               //final viewModel = HomeViewModel(taskRepository: context.read());

@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../shared_widgets/shared_app_bar.dart';
 import '../task_history_view_model.dart';
@@ -32,15 +33,19 @@ class TaskHistoryScreen extends StatelessWidget {
                                   color: Colors.grey
                               ),
                             ),
-                            leading: CircleAvatar(child: Icon(viewModel.getTypeIcon(
+                            leading: CircleAvatar(
+                                backgroundColor: viewModel.taskHistoryList[index].repeat == true ? Colors.blueGrey[200] : Colors.blueGrey[50],
+                                child: Icon(viewModel.getTypeIcon(
                                 viewModel.taskHistoryList[index].type))),
-                            title: Text(viewModel.taskHistoryList[index].description + (viewModel
-                                .taskHistoryList[index].repeat == true ? ' (repeat)' : '')),
+                            title: Text(viewModel.taskHistoryList[index].description),
                               subtitle:  Text(viewModel.taskHistoryList[index].lastCompletedDateFormatted()
                                   + viewModel.taskHistoryList[index].timeSpanText()
                                   + viewModel.taskHistoryList[index].timePeriodText()
                               ),
                             trailing: Icon(Icons.keyboard_double_arrow_right),
+                            onTap: (){
+                              context.go('/completed-tasks-edit/${viewModel.taskHistoryList[index].taskId}');
+                            },
                             onLongPress: () {
                               viewModel.rescheduleTask(context, viewModel.taskHistoryList[index]);
                             },

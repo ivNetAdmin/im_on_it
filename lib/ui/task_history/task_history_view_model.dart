@@ -9,6 +9,7 @@ import '../../domain/models/task_history.dart';
 import '../../utils/command.dart';
 import '../../data/repository/task_repository_interface.dart';
 import '../../utils/result.dart';
+import '../shared_helpers/domain_model_mapper_helper.dart';
 import '../shared_helpers/snack_bar_helper.dart';
 
 class TaskHistoryViewModel extends ChangeNotifier {
@@ -35,7 +36,7 @@ class TaskHistoryViewModel extends ChangeNotifier {
 
       switch (result) {
         case Ok<List<TaskHistoryEntity>>():
-          _taskHistoryList = mapTaskHistory(result.value);
+          _taskHistoryList = DomainModelMapperHelper.mapTaskHistory(result.value);
           return Result.ok(null);
         case Error<List<TaskHistoryEntity>>():
           return Result.error(result.error);
@@ -45,29 +46,6 @@ class TaskHistoryViewModel extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
-  }
-
-  List<TaskHistory> mapTaskHistory(List<TaskHistoryEntity> taskHistoryEntities) {
-    final taskHistoryList = List<TaskHistory>.empty(growable: true);
-
-    for (final taskHistoryEntity in taskHistoryEntities) {
-      taskHistoryList.add(
-          TaskHistory(
-            id: taskHistoryEntity.id,
-            taskId: taskHistoryEntity.taskId,
-            createDate: DateTime.fromMicrosecondsSinceEpoch(
-                taskHistoryEntity.createDate),
-            lastCompletedDate: DateTime.fromMicrosecondsSinceEpoch(
-                taskHistoryEntity.lastCompletedDate),
-            description: taskHistoryEntity.description,
-            type: taskHistoryEntity.type,
-            timeSpan: taskHistoryEntity.timeSpan,
-            timePeriod: taskHistoryEntity.timePeriod,
-            repeat: taskHistoryEntity.repeat == 1 ? true : false,
-          ),
-      );
-    }
-    return taskHistoryList;
   }
 
   IconData? getTypeIcon(String type) {

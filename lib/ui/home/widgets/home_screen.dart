@@ -185,11 +185,15 @@ class HomeScreen extends StatelessWidget {
                               color: Colors.grey
                           ),
                         ),
-                        leading: CircleAvatar(child: Icon(viewModel.getTypeIcon(
-                            viewModel.tasks[index].type))),
+                        leading: CircleAvatar(
+                          backgroundColor: viewModel
+                              .tasks[index].repeat == true ? Colors.blueGrey[200] : Colors.blueGrey[50],
+                          child: Icon(
+                            viewModel.getTypeIcon(
+                            viewModel.tasks[index].type)),
+                       ),
                         title: Text(
-                            viewModel.tasks[index].description + (viewModel
-                                .tasks[index].repeat == true ? ' (repeat)' : '')
+                            viewModel.tasks[index].description
                         ),
                         subtitle: Text(viewModel.tasks[index]
                             .targetDateFormatted()),

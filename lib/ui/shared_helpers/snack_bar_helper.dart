@@ -14,6 +14,7 @@ class SnackBarHelper {
   static void showFlashError(BuildContext context, String message, String messageType) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        duration: const Duration(seconds: 1),
         backgroundColor: messageType=='error'? Colors.red : Colors.black,
         content: Text(message),
       ),
