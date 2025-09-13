@@ -1,3 +1,4 @@
+import '../../domain/models/task_history.dart';
 import '../entities/task_history_entity.dart';
 
 abstract class TaskHistoryServiceInterface {
@@ -5,4 +6,6 @@ abstract class TaskHistoryServiceInterface {
   Future<int>addNewTaskHistory(TaskHistoryEntity newTaskHistory);
 
   Future<TaskHistoryEntity> getTaskHistoryEntityByTaskId(int taskId);
+
+  Future<int> deleteTaskHistory(TaskHistory taskHistory);
 }

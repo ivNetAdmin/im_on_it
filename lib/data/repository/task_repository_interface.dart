@@ -1,4 +1,5 @@
 
+import '../../domain/models/task_history.dart';
 import '../../utils/result.dart';
 import '../entities/task_entity.dart';
 import '../entities/task_history_entity.dart';
@@ -15,4 +16,5 @@ abstract class TaskRepositoryInterface{
 
   Future<Result<List<TaskHistoryEntity>>> getTaskHistoryList();
 
+  Future<Result<int>>deleteTaskHistory(TaskHistory taskHistory);
 }

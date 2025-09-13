@@ -106,4 +106,11 @@ class DatabaseHelper {
       throw UnsupportedError('TaskHistory entity not found [$taskId]');
     }
   }
+
+  static Future<int> deleteHistoryTask(int id) async {
+    final db = await _getDb();
+    return await db.delete("TaskHistory",
+        where: 'id = ?',
+        whereArgs: [id]);
+  }
 }

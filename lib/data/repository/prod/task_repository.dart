@@ -1,6 +1,7 @@
 import 'package:im_on_it/utils/format_message.dart';
 import 'package:im_on_it/utils/result.dart';
 
+import '../../../domain/models/task_history.dart';
 import '../../../ui/home/helpers/home_view_model_helper.dart';
 import '../../../ui/shared_helpers/date_format_helper.dart';
 import '../../entities/task_entity.dart';
@@ -133,6 +134,16 @@ class TaskRepository implements TaskRepositoryInterface {
       return Result.ok(await _taskHistoryService.getAllTaskHistory());
     } on Error catch (error) {
       return Result.error(error as Exception);
+    }
+  }
+
+  @override
+  Future<Result<int>> deleteTaskHistory(TaskHistory taskHistory) async {
+    try {
+      int rowId = await _taskHistoryService.deleteTaskHistory(taskHistory);
+      return Result.ok(rowId);
+    } on Exception catch (exception) {
+      return Result.error(exception);
     }
   }
 }

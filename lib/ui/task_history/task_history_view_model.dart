@@ -36,7 +36,7 @@ class TaskHistoryViewModel extends ChangeNotifier {
 
       switch (result) {
         case Ok<List<TaskHistoryEntity>>():
-          _taskHistoryList = DomainModelMapperHelper.mapTaskHistory(result.value);
+          _taskHistoryList = DomainModelMapperHelper.mapTaskHistory(result.value, null);
           return Result.ok(null);
         case Error<List<TaskHistoryEntity>>():
           return Result.error(result.error);

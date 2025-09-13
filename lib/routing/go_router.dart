@@ -29,7 +29,8 @@ GoRouter appRouter = GoRouter(
               path: 'completed-tasks-edit/:taskId',
               builder: (context, state) {
                 final viewModel = TaskHistoryEditViewModel(taskRepository: context.read());
-                return TaskHistoryEditScreen(viewModel: viewModel, taskId:state.pathParameters["taskId"]!);
+                viewModel.taskId = state.pathParameters["taskId"]!;
+                return TaskHistoryEditScreen(viewModel: viewModel);
               },
           ),
           GoRoute(
